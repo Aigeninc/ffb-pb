@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>Flag Football Playbook</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Play Selector -->
+    <div id="play-selector"></div>
+
+    <!-- Player Color Filter -->
+    <div id="player-filter"></div>
+
+    <!-- Timer Bar -->
+    <div id="timer-container">
+      <div id="timer-bar">
+        <div id="timer-segments">
+          <div class="timer-seg green"><span class="timer-seg-label">QUICK</span></div>
+          <div class="timer-seg yellow"><span class="timer-seg-label">MEDIUM</span></div>
+          <div class="timer-seg orange"><span class="timer-seg-label">DEEP</span></div>
+          <div class="timer-seg red"><span class="timer-seg-label">NOW!</span></div>
+        </div>
+        <div id="timer-needle"></div>
+        <span id="timer-time">0.0s</span>
+      </div>
+    </div>
+
+    <!-- Field Canvas -->
+    <div id="field-container">
+      <canvas id="field-canvas"></canvas>
+    </div>
+
+    <!-- Controls -->
+    <div id="controls">
+      <button class="ctrl-btn" id="btn-replay" title="Replay">🔄</button>
+      <button class="ctrl-btn" id="btn-play" title="Play/Pause">▶</button>
+      <button class="ctrl-btn" id="btn-mode" title="Toggle QB Study / Game Speed">👁️</button>
+      <button class="ctrl-btn" id="btn-ball" title="Toggle ball animation">🏈</button>
+      <button class="ctrl-btn" id="btn-sun" title="Sunlight mode — thicker lines, larger dots" style="opacity:0.4">☀️</button>
+      <button class="ctrl-btn" id="btn-edit" title="Edit / Create plays" style="opacity:0.4">✏️</button>
+      <button class="ctrl-btn" id="btn-queue" title="Play Queue" style="opacity:0.4">📋</button>
+      <button class="ctrl-btn" id="btn-coach" title="Coach Call Sheet" style="opacity:0.4">🧠</button>
+      <button class="ctrl-btn" id="btn-gameday" title="Game Day Call Sheet" style="opacity:0.4">🎯</button>
+      <button class="ctrl-btn" id="btn-roster" title="Roster &amp; Lineup" style="opacity:0.4">👥</button>
+      <div class="speed-group">
+        <button class="speed-btn" data-speed="0.25">0.25x</button>
+        <button class="speed-btn" data-speed="0.5">0.5x</button>
+        <button class="speed-btn active" data-speed="1">1x</button>
+        <button class="speed-btn" data-speed="2">2x</button>
+      </div>
+    </div>
+
+    <!-- Coach Call Sheet (hidden by default) -->
+    <div id="coach-panel" style="display:none">
+      <div id="coach-situation">
+        <div class="sit-row">
+          <span class="sit-label">DOWN</span>
+          <button class="sit-btn" data-sit="down" data-val="1">1st</button>
+          <button class="sit-btn" data-sit="down" data-val="2">2nd</button>
+          <button class="sit-btn" data-sit="down" data-val="3">3rd</button>
+          <button class="sit-btn" data-sit="down" data-val="4">4th</button>
+        </div>
+        <div class="sit-row">
+          <span class="sit-label">FIELD</span>
+          <button class="sit-btn" data-sit="field" data-val="open">Open</button>
+          <button class="sit-btn" data-sit="field" data-val="mid">Midfield</button>
+          <button class="sit-btn" data-sit="field" data-val="rz">Red Zone</button>
+          <button class="sit-btn" data-sit="field" data-val="nrz">No-Run</button>
+        </div>
+        <div class="sit-row">
+          <span class="sit-label">THEY</span>
+          <button class="sit-btn" data-sit="defense" data-val="man">Man</button>
+          <button class="sit-btn" data-sit="defense" data-val="zone">Zone</button>
+          <button class="sit-btn" data-sit="defense" data-val="rush">Rush</button>
+          <button class="sit-btn" data-sit="defense" data-val="idk">IDK</button>
+        </div>
+      </div>
+      <div id="coach-recs"></div>
+    </div>
+
+    <!-- Queue Bar (hidden by default) -->
+    <div id="queue-bar" style="display:none">
+      <div id="queue-header">
+        <span id="queue-status">QUEUE: Tap plays to add</span>
+        <span id="queue-score"></span>
+      </div>
+      <div id="queue-plays"></div>
+      <div id="queue-controls">
+        <button id="queue-prev" class="queue-btn">◀</button>
+        <button id="queue-fail" class="queue-btn queue-fail">❌</button>
+        <button id="queue-success" class="queue-btn queue-success">✅</button>
+        <button id="queue-next" class="queue-btn">▶</button>
+        <button id="queue-clear" class="queue-btn queue-clear">🗑️</button>
+      </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div id="info-panel">
+      <div id="formation-label"></div>
+      <div id="when-to-use"></div>
+      <div id="play-notes"></div>
+    </div>
+  </div>
+
+  <!-- Game Day Panel Backdrop -->
+  <div id="gameday-backdrop" class="panel-backdrop"></div>
+
+  <!-- Game Day Bottom Sheet -->
+  <div id="gameday-panel" class="gameday-panel">
+    <div class="gd-panel-header">
+      <span class="gd-panel-title">🎯 CALL SHEET</span>
+      <div class="gd-header-actions">
+        <button class="gd-new-game-link" id="gd-new-game-btn" title="New Game">New Game</button>
+        <button class="panel-close-btn" id="gd-close-btn" aria-label="Close">✕</button>
+      </div>
+    </div>
+
+    <!-- Situation tabs -->
+    <div id="gd-situation-tabs" class="gd-situation-tabs"></div>
+
+    <!-- Play list -->
+    <div id="gd-play-list" class="gd-play-list"></div>
+
+    <!-- Result prompt (shown after calling a play) -->
+    <div id="gd-result-prompt" class="gd-result-prompt" style="display:none">
+      <span class="gd-prompt-label">How'd it go? <strong class="gd-prompt-name"></strong></span>
+      <div class="gd-result-btns">
+        <button class="gd-result-btn gd-result-worked" id="gd-result-worked">✅ Worked</button>
+        <button class="gd-result-btn gd-result-didnt" id="gd-result-didnt">❌ Didn't</button>
+        <button class="gd-result-btn gd-result-skip" id="gd-result-skip">⏭️ Skip</button>
+      </div>
+    </div>
+
+    <!-- Last called ticker -->
+    <div class="gd-last-called-bar">
+      <span class="gd-last-label">Last called:</span>
+      <div id="gd-last-called" class="gd-last-called"></div>
+    </div>
+
+    <!-- Bottom actions -->
+    <div class="gd-bottom-actions">
+      <button class="gd-action-btn" id="gd-stats-btn">📊 Stats</button>
+      <button class="gd-action-btn" id="gd-wristband-btn">🖨️ Wristband</button>
+    </div>
+
+    <!-- Stats panel (toggles inside) -->
+    <div id="gd-stats-panel" class="gd-stats-panel" style="display:none"></div>
+  </div>
+
+  <!-- Roster Panel Backdrop -->
+  <div id="roster-backdrop" class="panel-backdrop"></div>
+
+  <!-- Roster Panel -->
+  <div id="roster-panel" class="side-panel">
+    <div class="panel-header">
+      <span class="panel-title">👥 Roster &amp; Lineup</span>
+      <button class="panel-close-btn" id="roster-close-btn" aria-label="Close">✕</button>
+    </div>
+
+    <div class="panel-body">
+
+      <!-- Starting Lineup -->
+      <div class="roster-section">
+        <div class="roster-section-title">STARTING LINEUP</div>
+        <div id="lineup-grid" class="lineup-grid"></div>
+        <div id="roster-rotation-bar" class="rotation-bar"></div>
+      </div>
+
+      <!-- Bench / Full Roster -->
+      <div class="roster-section">
+        <div class="roster-section-title">BENCH &amp; ROSTER</div>
+        <div id="bench-list" class="bench-list"></div>
+      </div>
+
+      <!-- Inline Player Form -->
+      <div id="roster-form-area" class="roster-form-area" style="display:none"></div>
+
+      <!-- My Routes Section -->
+      <div class="roster-section">
+        <div class="roster-section-title">MY ROUTES</div>
+        <div id="routes-player-select" class="routes-player-select"></div>
+      </div>
+
+      <!-- Routes Result (shown when a player is tapped) -->
+      <div id="routes-section" class="routes-result" style="display:none"></div>
+
+    </div><!-- /.panel-body -->
+  </div><!-- /#roster-panel -->
+
+  <script src="plays.js"></script>
+  <script type="module" src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
