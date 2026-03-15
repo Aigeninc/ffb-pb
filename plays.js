@@ -1,4 +1,4 @@
-// plays.js — 30 flag football plays (25 base + 5 new: double-back formation — counter, boot, hook-ladder, I-bone)
+// plays.js — 35 flag football plays (25 base + 5 double-back + 5 new 2-back plays)
 // Coordinates: X = 0-35 (sideline to sideline), Y = negative behind LOS, positive downfield
 // LOS is at Y=0
 
@@ -880,6 +880,158 @@ const PLAYS = [
       { x: 33, y: 4, text: 'OPT 1: GREYSON\nD GOES LEFT', color: '#dc2626' },
       { x: 2, y: 3, text: 'OPT 2: MARSHALL\nD GOES RIGHT', color: '#f59e0b' },
       { x: 24, y: 7, text: 'OPT 3: COOPER SLANT\nIF BOTH COVERED', color: '#2dd4bf' },
+    ],
+  },
+
+  // ── 31. SPEED PITCH ────────────────────────────────────────────────────
+  // Double-Back: Quick pitch to Greyson on the edge — the breakaway TD play
+  {
+    name: 'Speed Pitch',
+    formation: 'Double-Back',
+    isRunPlay: true,
+    whenToUse: [
+      'Need a quick perimeter run — ball out FAST',
+      'Defense crashing inside or stacking the middle',
+      'Greyson speed advantage on the edge — let him run'
+    ],
+    notes: 'FASTEST run play. Braelyn catches snap, IMMEDIATE pitch to Greyson going right. Marshall fakes left to hold backside. Cooper clears with go route.',
+    players: {
+      Braelyn:  { pos: [17.5, -3],   route: [[19, -3]], label: 'PITCH', read: 0, dashed: true },
+      Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
+      Greyson:  { pos: [12, -5],     route: [[17, -3], [24, -1], [30, 1], [34, 5], [35, 14]], label: 'SPEED!', read: 0, dashed: false },
+      Marshall: { pos: [23, -5],     route: [[18, -3], [12, -1], [7, 1]], label: 'FAKE LEFT', read: 0, dashed: true },
+      Cooper:   { pos: [31, 0],      route: [[31, 18]], label: 'GO (clear)', read: 0, dashed: true },
+    },
+    defense: [[10, 5], [17.5, 7], [25, 5], [8, 13], [27, 13]],
+    timing: {},
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Greyson', time: 0.3, type: 'lateral' },
+    ],
+    specialLabels: [
+      { x: 7, y: 1, text: 'FAKE LEFT\nHOLDS BACKSIDE', color: '#ff6600' },
+      { x: 35, y: 15, text: '★ GREYSON\nOUTRUNS EVERYONE', color: '#dc2626' },
+    ],
+  },
+
+  // ── 32. SPLIT SWEEP ───────────────────────────────────────────────────
+  // Double-Back: Both backs go RIGHT — Marshall leads as decoy, Greyson follows with ball
+  {
+    name: 'Split Sweep',
+    formation: 'Double-Back',
+    isRunPlay: true,
+    whenToUse: [
+      'Defense spread out — overwhelm one side with 2 backs',
+      'Marshall as lead decoy draws the first defender',
+      'Counter after running Counter Sweep — both go same way'
+    ],
+    notes: 'BOTH backs go right. Marshall leads as first decoy (defense keys on him). Greyson follows 2 yards behind with the ball. WR clears deep.',
+    players: {
+      Braelyn:  { pos: [17.5, -3],   route: [[19, -4]], label: 'HANDOFF', read: 0, dashed: true },
+      Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
+      Marshall: { pos: [23, -5],     route: [[26, -3], [30, -1], [33, 2], [35, 6]], label: 'LEAD (decoy)', read: 0, dashed: true },
+      Greyson:  { pos: [12, -5],     route: [[17, -4], [23, -2], [28, 0], [33, 4], [35, 10]], label: 'FOLLOW!', read: 0, dashed: false },
+      Cooper:   { pos: [31, 0],      route: [[31, 18]], label: 'GO (clear)', read: 0, dashed: true },
+    },
+    defense: [[10, 5], [17.5, 7], [25, 5], [8, 13], [27, 13]],
+    timing: {},
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Greyson', time: 0.6, type: 'handoff' },
+    ],
+    specialLabels: [
+      { x: 35, y: 7, text: 'MARSHALL DRAWS\nFIRST DEFENDER', color: '#f59e0b' },
+      { x: 35, y: 11, text: '★ GREYSON FOLLOWS\nINTO OPEN LANE', color: '#dc2626' },
+    ],
+  },
+
+  // ── 33. COUNTER PASS ──────────────────────────────────────────────────
+  // Double-Back: Fake counter run action, then Braelyn throws deep to WR on post
+  {
+    name: 'Counter Pass',
+    formation: 'Double-Back',
+    whenToUse: [
+      'After running Counter Sweep — defense biting HARD on run fakes',
+      'Defense crashes on Greyson run — leaves deep middle open',
+      'Need a big play off run-action misdirection'
+    ],
+    notes: 'LOOKS LIKE Counter Sweep! Both backs fake run action. Defense crashes. Braelyn pulls ball and throws to Cooper on post route. ONE READ.',
+    players: {
+      Braelyn:  { pos: [17.5, -3],   route: [], label: 'FAKE + THROW', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
+      Greyson:  { pos: [12, -5],     route: [[16, -3], [22, -1], [26, 1]], label: 'FAKE RUN', read: 0, dashed: true },
+      Marshall: { pos: [23, -5],     route: [[18, -3], [12, -1]], label: 'FAKE LEFT', read: 0, dashed: true },
+      Cooper:   { pos: [31, 0],      route: [[31, 4], [25, 10], [20, 16]], label: 'POST!', read: 1, dashed: false },
+    },
+    defense: [[10, 5], [17.5, 7], [25, 5], [8, 13], [27, 13]],
+    timing: { 1: 2.0 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Cooper', time: 2.0, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 22, y: 1, text: 'FAKE COUNTER', color: '#ff6600' },
+      { x: 20, y: 17, text: '★ COOPER POST\nDEFENSE BIT ON RUN', color: '#2dd4bf' },
+    ],
+  },
+
+  // ── 34. DUAL WHEEL ────────────────────────────────────────────────────
+  // Double-Back: Both backs release into routes — wheel + flat, flood the right side
+  {
+    name: 'Dual Wheel',
+    formation: 'Double-Back',
+    whenToUse: [
+      'Defense focused on stopping the run — backs leak out',
+      'Flood one side with 2 backs as receivers',
+      'Greyson wheel deep + Marshall flat = high-low read'
+    ],
+    notes: 'Both backs release into pass routes after a count. Greyson swings right and wheels up sideline DEEP. Marshall releases to flat SHORT. High-low read for Braelyn.',
+    players: {
+      Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
+      Greyson:  { pos: [12, -5],     route: [[12, -3], [16, -1], [24, 1], [29, 4], [32, 8], [33, 16]], label: 'WHEEL!', read: 1, dashed: false },
+      Marshall: { pos: [23, -5],     route: [[23, -3], [28, -1], [33, 2]], label: 'FLAT', read: 2, dashed: false },
+      Cooper:   { pos: [4, 0],       route: [[4, 18]], label: 'GO (clear left)', read: 0, dashed: true },
+    },
+    defense: [[10, 5], [17.5, 7], [25, 5], [8, 13], [27, 13]],
+    timing: { 1: 2.5, 2: 1.5 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Greyson', time: 2.5, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 33, y: 17, text: '★ GREYSON DEEP\nWHEEL UP SIDELINE', color: '#dc2626' },
+      { x: 33, y: 3, text: 'MARSHALL FLAT\nSHORT OPTION', color: '#f59e0b' },
+    ],
+  },
+
+  // ── 35. SPLIT BACK SCREEN ─────────────────────────────────────────────
+  // Double-Back: Fake to Greyson going right, screen pass to Marshall behind LOS going left
+  {
+    name: 'Split Back Screen',
+    formation: 'Double-Back',
+    whenToUse: [
+      'Defense over-pursuing Greyson on run plays',
+      'Need to get Marshall the ball in space',
+      'Counter misdirection — fake right, screen left'
+    ],
+    notes: 'FAKE handoff to Greyson going right (defense chases). Marshall delays, drifts LEFT behind LOS. Braelyn dumps quick screen. Marshall has the entire left side open.',
+    players: {
+      Braelyn:  { pos: [17.5, -3],   route: [], label: 'PUMP + DUMP', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
+      Greyson:  { pos: [12, -5],     route: [[16, -3], [22, -1], [28, 1]], label: 'FAKE RUN', read: 0, dashed: true },
+      Marshall: { pos: [23, -5],     route: [[20, -5], [14, -4], [8, -2], [4, 2], [2, 8]], label: 'SCREEN!', read: 1, dashed: false, delay: 1.0 },
+      Cooper:   { pos: [4, 0],       route: [[4, 14]], label: 'GO (clear)', read: 0, dashed: true },
+    },
+    defense: [[10, 5], [17.5, 7], [25, 5], [8, 13], [27, 13]],
+    timing: { 1: 1.5 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Marshall', time: 1.5, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 26, y: 1, text: 'DEFENSE CHASES\nGREYSON RIGHT →', color: '#ff6600' },
+      { x: 2, y: 9, text: '★ MARSHALL OPEN\nENTIRE LEFT SIDE', color: '#f59e0b' },
     ],
   },
 
