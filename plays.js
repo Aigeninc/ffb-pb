@@ -24,6 +24,7 @@ const PLAYS = [
       'Defense is tight on outside routes'
     ],
     notes: 'SUB: Jordy can replace Cooper at RB (flat)',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Stare at Marshall crossing RIGHT → 🏈 Throw to Greyson crossing LEFT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[22, 3], [27, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -51,6 +52,7 @@ const PLAYS = [
       'Defense is jumping the flat/corner combo'
     ],
     notes: 'LOOKS LIKE Flood Right for 1 sec! Cooper fakes flat then burns deep. MIRROR PLAY.',
+    qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Stare at Greyson on corner RIGHT → 🏈 Throw to Cooper on deep post LEFT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -79,6 +81,7 @@ const PLAYS = [
       'Need to move the chains'
     ],
     notes: 'SUB: Jordy can replace Cooper at RB (flat)',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Stare at Marshall on out RIGHT → 🏈 Throw to Greyson on corner DEEP' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -137,6 +140,7 @@ const PLAYS = [
       'Mix up the look — run AND pass threat'
     ],
     notes: 'SUB: Zeke can play RB here when ahead',
+    qbLook: { eyes: 'Cooper', throw: 'Greyson', tip: '👀 Glance at Cooper clearing RIGHT → 🏈 Throw to Greyson slant (or hand to Marshall run)' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [[19, -4]], label: '', read: 0, dashed: true },
       Lenox:    { pos: [17.5, 0],  route: [[23, 3], [28, 5]], label: 'CHECK', read: 2, dashed: true },
@@ -168,6 +172,7 @@ const PLAYS = [
       'Need the fastest possible throw'
     ],
     notes: 'SUB: Jordy can replace Cooper at RB (flat)',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Stare at Marshall slanting RIGHT → 🏈 Quick throw to Greyson slanting LEFT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -194,6 +199,7 @@ const PLAYS = [
       'Defense is sitting on short stuff'
     ],
     notes: 'SUB: Zeke can replace Cooper (flat decoy) when ahead',
+    qbLook: { eyes: 'Cooper', throw: 'Marshall', tip: '👀 Stare at Cooper flat RIGHT → 🏈 Throw to Marshall wheeling DEEP up sideline' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -220,6 +226,7 @@ const PLAYS = [
       'Need a mismatch — nobody expects QB to run a route'
     ],
     notes: '⚠ RUSH IS LIVE after lateral — ball out in 1.5 sec! TRICK PLAY — max 2-3x per game.',
+    qbLook: { eyes: 'Cooper', throw: 'Braelyn', tip: '👀 Marshall: stare at Cooper go RIGHT → 🏈 Throw to Braelyn on flat (she is your receiver!)' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [[20, -3], [20, -2], [25, 4]], label: 'FLAT', read: 1, dashed: false,
                   lateralTo: [22, -5] },
@@ -250,6 +257,7 @@ const PLAYS = [
       'Zone defense — 3 levels beat zone'
     ],
     notes: 'SUB: Jordy can replace Cooper at RB (flat)',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Stare at Marshall out LEFT → 🏈 Throw to Greyson corner DEEP LEFT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[23, 3], [28, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -275,6 +283,7 @@ const PLAYS = [
       'Need a deep shot — DB bites on fake hitch'
     ],
     notes: 'Greyson fakes hitch then explodes deep. Marshall motions in for hitch. No subs on WR1.',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Stare at Marshall hitch → 🏈 Throw to Greyson burning DEEP (fake hitch then go!)' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[22, 3], [28, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -302,6 +311,7 @@ const PLAYS = [
       'Need yards after catch — RB in space'
     ],
     notes: 'SUB: Jordy can replace Greyson/Marshall as go-route decoy',
+    qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Pump fake deep to Greyson → 🏈 Dump short to Cooper on screen RIGHT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: 'PUMP FAKE', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 2, dashed: true },
@@ -332,6 +342,7 @@ const PLAYS = [
       'Need chunk yardage from misdirection'
     ],
     notes: 'LOOKS LIKE Reverse! Same motion. Braelyn pump fakes handoff, hits Greyson slant.',
+    qbLook: { eyes: 'Cooper', throw: 'Greyson', tip: '👀 Pump fake to Cooper (fake reverse) → 🏈 Throw to Greyson slant RIGHT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: 'PUMP FAKE', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[23, 3], [28, 5]], label: 'CHECK', read: 3, dashed: true },
@@ -364,6 +375,7 @@ const PLAYS = [
       '50/50 ball to tallest kid (Marshall)'
     ],
     notes: 'Always give fade to Marshall (tallest). No subs on WR1.',
+    qbLook: { eyes: 'Greyson', throw: 'Marshall', tip: '👀 Stare at Greyson slant LEFT → 🏈 Lob to Marshall fading DEEP RIGHT corner' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -393,6 +405,7 @@ const PLAYS = [
       'Need a big play off a familiar look'
     ],
     notes: 'LOOKS LIKE Mesh! Cooper fakes the cross, wheels up sideline. DB bites inside = TD.',
+    qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Stare at Greyson crossing (mesh) → 🏈 Throw to Cooper wheeling DEEP up sideline' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[22, 3], [27, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -424,6 +437,7 @@ const PLAYS = [
       'Need a deep shot from a familiar look'
     ],
     notes: 'LOOKS LIKE Quick Slants! Greyson fakes slant at 3yd then explodes deep outside. COUNTER PLAY.',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Stare at Marshall slant RIGHT → 🏈 Throw to Greyson going DEEP LEFT (fake slant then go!)' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 4, dashed: true },
@@ -550,6 +564,7 @@ const PLAYS = [
       'Want Braelyn making live reads at the mesh point'
     ],
     notes: 'OPT 1: Give to Greyson → run right. OPT 2: Keep → read Flood. Marshall corner deep, Cooper out mid.',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Read: hand to Greyson if edge open → 🏈 OR keep and throw Marshall corner DEEP' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 3, dashed: true },
@@ -581,6 +596,7 @@ const PLAYS = [
       'Greyson healthy and fast for perimeter threat'
     ],
     notes: 'OPT 1: Greyson run right. If stopped → lateral back to Braelyn. OPT 2: Marshall go deep. OPT 3: Cooper out 8yd.',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Read edge: hand to Greyson RIGHT if open → 🏈 OR keep, throw Marshall deep' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [[14, -2], [10, -2]], label: 'READS', read: 0, dashed: true },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 3, dashed: true },
@@ -613,6 +629,7 @@ const PLAYS = [
       "Get Cooper or Greyson the ball immediately with blockers ahead"
     ],
     notes: 'Fastest completion — almost a handoff through air. Cooper catches 2yd behind LOS. Greyson + Marshall clear space.',
+    qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Glance at Greyson deep LEFT → 🏈 Quick throw to Cooper bubble RIGHT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [], label: '', read: 0, dashed: false },
@@ -643,6 +660,7 @@ const PLAYS = [
       'Short yardage — pick up 5-6 yards quickly'
     ],
     notes: 'Greyson takes 3 steps upfield, TURNS. Braelyn delivers immediately — 1-count throw.',
+    qbLook: { eyes: 'Cooper', throw: 'Greyson', tip: '👀 Glance at Cooper flat → 🏈 Quick throw to Greyson on hitch (3 steps, turn, CATCH)' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 3, dashed: true },
@@ -672,6 +690,7 @@ const PLAYS = [
       'Misdirection combo — motion right, ball goes LEFT'
     ],
     notes: 'LOOKS LIKE Jet Sweep! Greyson motions L→R. Defense chases RIGHT. Braelyn throws Bubble to Cooper going LEFT.',
+    qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Stare RIGHT at Greyson jet motion → 🏈 Throw LEFT to Cooper on bubble' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [], label: '', read: 0, dashed: false },
@@ -800,6 +819,7 @@ const PLAYS = [
       'ONE read — Marshall flat on bootleg side. Pre-determined throw.'
     ],
     notes: 'SELL fake to Greyson right. Braelyn rolls out LEFT. Cooper releases to flat on left — ONLY target. Marshall clears with go route. ONE DECISION.',
+    qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Sell fake handoff to Greyson RIGHT → 🏈 Boot left, throw to Cooper flat LEFT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [[20, -4], [15, -2], [8, 2]], label: 'BOOT LEFT', read: 0, dashed: true },
       Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
@@ -831,6 +851,7 @@ const PLAYS = [
       '"Foundation of flag offense" — multiple coaches say this is THE play'
     ],
     notes: 'Greyson runs 5-6yd hook (turns BACK to QB). Braelyn throws immediately. Greyson catches and LATERALS to Marshall trailing behind. NO HESITATION on lateral.',
+    qbLook: { eyes: 'Cooper', throw: 'Greyson', tip: '👀 Look off Cooper deep → 🏈 Throw to Greyson hook (Greyson laterals to Marshall!)' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
@@ -956,6 +977,7 @@ const PLAYS = [
       'Need a big play off run-action misdirection'
     ],
     notes: 'LOOKS LIKE Counter Sweep! Both backs fake run action. Defense crashes. Braelyn pulls ball and throws to Cooper on post route. ONE READ.',
+    qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Sell fake counter to Greyson RIGHT → 🏈 Throw to Cooper deep post MIDDLE' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: 'FAKE + THROW', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
@@ -986,6 +1008,7 @@ const PLAYS = [
       'Greyson wheel deep + Marshall flat = high-low read'
     ],
     notes: 'Both backs release into pass routes after a count. Greyson swings right and wheels up sideline DEEP. Marshall releases to flat SHORT. High-low read for Braelyn.',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Stare at Marshall flat SHORT → 🏈 Throw to Greyson wheeling DEEP up sideline' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
@@ -1016,6 +1039,7 @@ const PLAYS = [
       'Counter misdirection — fake right, screen left'
     ],
     notes: 'FAKE handoff to Greyson going right (defense chases). Marshall delays, drifts LEFT behind LOS. Braelyn dumps quick screen. Marshall has the entire left side open.',
+    qbLook: { eyes: 'Greyson', throw: 'Marshall', tip: '👀 Fake to Greyson RIGHT → 🏈 Dump to Marshall screen LEFT' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: 'PUMP + DUMP', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
@@ -1046,6 +1070,7 @@ const PLAYS = [
       'Need the big play — Greyson/Marshall wide open deep'
     ],
     notes: 'LOOKS LIKE Screen! Pump fake, but Greyson runs a real post. Defense crashes screen = TD.',
+    qbLook: { eyes: 'Cooper', throw: 'Greyson', tip: '👀 Pump fake to Cooper screen → 🏈 Throw to Greyson deep post (defense crashes screen!)' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: 'PUMP FAKE', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 3, dashed: true },

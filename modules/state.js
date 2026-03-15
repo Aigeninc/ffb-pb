@@ -49,6 +49,7 @@ export const state = {
   viewMode: 'qb',      // 'qb' = staggered reads, 'game' = simultaneous
   defenseMode: 'off',  // 'off' | 'man' | 'zone' — hardcoded off, defense UI removed for simplicity
   showBall: false,
+  qbMode: false,       // simplified QB look-off view
   sunlightMode: false,
   substitutions: {},   // { playIdx: { origName: replaceName } } — per-play overrides
   subMenuOpen: false,

@@ -1,6 +1,6 @@
 // Service Worker for offline support
 // Update CACHE_VERSION when assets change to bust old caches
-const CACHE_VERSION = '20260315-v35plays';
+const CACHE_VERSION = '20260315-qbmode';
 const CACHE_NAME = 'playbook-' + CACHE_VERSION;
 
 const ASSETS = [

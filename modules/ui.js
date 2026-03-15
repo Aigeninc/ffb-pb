@@ -281,8 +281,27 @@ export function buildControls() {
 
 export function updateInfoPanel() {
   const play = PLAYS[state.currentPlayIdx];
-  document.getElementById('formation-label').textContent = 'Formation: ' + play.formation;
-  document.getElementById('when-to-use').innerHTML = play.whenToUse
-    .map(b => '<span class="bullet">•</span>' + b).join('&nbsp;&nbsp;');
-  document.getElementById('play-notes').textContent = play.notes || '';
+
+  if (state.qbMode && play.qbLook) {
+    // Simplified QB look-off view
+    const look = play.qbLook;
+    document.getElementById('formation-label').textContent = '🎯 QB LOOK-OFF: ' + play.name;
+    document.getElementById('when-to-use').innerHTML =
+      `<span style="font-size:1.1em;line-height:1.6">${look.tip}</span>`;
+    const isRun = play.isRunPlay;
+    document.getElementById('play-notes').textContent = isRun
+      ? '🏃 RUN PLAY — just hand it off!'
+      : `EYES → ${look.eyes} … THROW → ${look.throw}`;
+  } else if (state.qbMode && play.isRunPlay) {
+    document.getElementById('formation-label').textContent = '🎯 QB LOOK-OFF: ' + play.name;
+    document.getElementById('when-to-use').innerHTML =
+      '<span style="font-size:1.1em">🏃 RUN PLAY — sell the fake and hand off!</span>';
+    document.getElementById('play-notes').textContent = play.notes || '';
+  } else {
+    // Normal view
+    document.getElementById('formation-label').textContent = 'Formation: ' + play.formation;
+    document.getElementById('when-to-use').innerHTML = play.whenToUse
+      .map(b => '<span class="bullet">•</span>' + b).join('&nbsp;&nbsp;');
+    document.getElementById('play-notes').textContent = play.notes || '';
+  }
 }

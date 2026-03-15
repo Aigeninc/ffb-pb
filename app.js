@@ -165,6 +165,16 @@ function init() {
   // Pass updateTimer to animation loop
   setUpdateTimerFn(updateTimer);
 
+  // QB Mode button
+  const qbBtn = document.getElementById('btn-qb');
+  if (qbBtn) {
+    qbBtn.addEventListener('click', () => {
+      state.qbMode = !state.qbMode;
+      qbBtn.style.opacity = state.qbMode ? '1' : '0.4';
+      updateInfoPanel();
+    });
+  }
+
   // Restore sunlight button opacity if mode was loaded
   if (state.sunlightMode) {
     const sunBtn = document.getElementById('btn-sun');
