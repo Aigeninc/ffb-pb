@@ -481,7 +481,7 @@ html, body {
   gap: 4px;
 }
 .speed-btn {
-  min-width: 44px;
+  min-width: 56px;
   min-height: 44px;
   border: 2px solid var(--surface2);
   border-radius: 8px;
@@ -494,6 +494,14 @@ html, body {
 }
 .speed-btn:active { transform: scale(0.9); }
 .speed-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+.speed-btn[data-speed="0.25"] { border-color: #22c55e; }
+.speed-btn[data-speed="0.25"].active { background: #22c55e; color: #000; }
+.speed-btn[data-speed="0.5"] { border-color: #eab308; }
+.speed-btn[data-speed="0.5"].active { background: #eab308; color: #000; }
+.speed-btn[data-speed="1"] { border-color: #f97316; }
+.speed-btn[data-speed="1"].active { background: #f97316; color: #000; }
+.speed-btn[data-speed="2"] { border-color: #ef4444; }
+.speed-btn[data-speed="2"].active { background: #ef4444; color: #fff; }
 
 /* ── Responsive ──────────────────────────────────────────── */
 @media (min-width: 768px) {

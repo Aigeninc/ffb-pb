@@ -42,7 +42,7 @@ export const state = {
   currentPlayIdx: 0,
   animTime: 0,
   playing: false,
-  speed: 1,
+  speed: 0.25,
   lastFrameTs: null,
   highlightPlayer: null,
   animId: null,
@@ -333,6 +333,8 @@ export function loadPreferences() {
       state.sunlightMode = true;
       document.body.classList.add('sunlight');
     }
+    const savedSpeed = localStorage.getItem('playbook:speed');
+    if (savedSpeed) state.speed = parseFloat(savedSpeed);
   } catch (e) {}
 }
 

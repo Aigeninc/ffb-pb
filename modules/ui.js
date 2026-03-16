@@ -383,7 +383,12 @@ export function buildControls() {
       state.speed = parseFloat(btn.dataset.speed);
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      try { localStorage.setItem('playbook:speed', String(state.speed)); } catch(e) {}
     });
+  });
+  // Sync active class to state.speed (e.g. after loadPreferences restores a saved speed)
+  document.querySelectorAll('.speed-btn').forEach(b => {
+    b.classList.toggle('active', parseFloat(b.dataset.speed) === state.speed);
   });
 }
 
