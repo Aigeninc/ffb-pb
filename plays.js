@@ -172,7 +172,7 @@ const PLAYS = [
     timing: { 1: 1.0, 2: 2.0, 3: 3.5 },
     ballPath: [
       { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
-      { from: 'Braelyn', to: 'Marshall', time: 0.5, type: 'handoff' },
+      { from: 'Braelyn', to: 'Greyson', time: 1.0, type: 'throw' },
     ],
     specialLabels: [
       { x: 27, y: 1, text: 'OPT 1: RUN', color: '#f59e0b' },
@@ -539,7 +539,6 @@ const PLAYS = [
       Greyson:  { pos: [21, -2],   route: [[26, -1], [33, 2], [35, 10]], label: 'JET SWEEP!', read: 0, dashed: false,
                   motion: { from: [4, -1], to: [21, -2] } },
       Marshall: { pos: [3, 0],     route: [[3, 18]], label: 'GO (pull safety)', read: 0, dashed: false },
-      Cooper:   { pos: [31, 0],    route: [[31, 8]], label: 'GO (clear)', read: 0, dashed: true },
       Mason:    { pos: [21, -6],   route: [[17.5, -3], [17.5, 5]], label: 'FAKE RB', read: 0, dashed: true },
     },
     defense: [[10, 5], [17.5, 7], [25, 5], [8, 13], [27, 13]],
@@ -827,7 +826,6 @@ const PLAYS = [
                   motion: { from: [4, -1], to: [21, -2] },
                   fakeSegment: [[21, -2], [26, -1]] },
       Marshall: { pos: [3, 0],     route: [[3, 14]], label: 'GO (decoy)', read: 0, dashed: true },
-      Cooper:   { pos: [31, 0],    route: [[31, 14]], label: 'GO (decoy)', read: 0, dashed: true },
       Mason:    { pos: [17.5, -6], route: [[17.5, -3], [17.5, 2], [17.5, 12]], label: 'DRAW!', read: 0, dashed: false, delay: 1.5 },
     },
     defense: [[10, 5], [17.5, 7], [25, 5], [8, 13], [27, 13]],
@@ -924,7 +922,7 @@ const PLAYS = [
     whenToUse: [
       'After Counter Sweep — defense biting on fake',
       'Double-Back pass off run action',
-      'ONE read — Marshall flat on bootleg side. Pre-determined throw.'
+      'ONE read — Cooper flat on bootleg side. Pre-determined throw.'
     ],
     notes: 'SELL fake to Greyson right. Braelyn rolls out LEFT. Cooper releases to flat on left — ONLY target. Marshall clears with go route. ONE DECISION.',
     qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Sell fake handoff to Greyson RIGHT → 🏈 Boot left, throw to Cooper flat LEFT' },
@@ -1000,6 +998,7 @@ const PLAYS = [
       'Greyson and Marshall create a binary read for Braelyn'
     ],
     notes: 'Stack formation: Greyson directly behind Braelyn, Marshall behind Greyson. At snap — Greyson RIGHT, Marshall LEFT. Braelyn reads where defense commits, hands to open back. OR throws Cooper slant if both covered.',
+    qbLook: { eyes: 'Greyson', throw: 'Greyson', tip: '👀 Read the edge → 🏈 Hand to Greyson RIGHT (or Marshall LEFT, or throw Cooper slant)' },
     players: {
       Braelyn:  { pos: [17.5, -3],   route: [], label: 'READ + HAND', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],    route: [], label: '', read: 0, dashed: false },
@@ -1241,7 +1240,6 @@ const PLAYS = [
     family: 'exotic',
     fake:   "Looks like a normal play — defense keys on Braelyn at QB position, assigns coverage based on her",
     target: "GREYSON gets the direct snap and is actually the QB — defense is in wrong assignment when fastest player gets ball",
-    isRunPlay: true,
     whenToUse: [
       "Defense keying on Braelyn — she never gets the snap!",
       'Need to totally surprise the defense pre-snap',
@@ -1458,15 +1456,15 @@ const PLAYS = [
     formation: 'Spread',
     tags: [],
     family: 'shot',
-    fake:   "Looks like a deep ball — two receivers sprinting downfield, defense has to pick who to cover",
-    target: "Whichever WR has the better 1-on-1 matchup — Greyson or Marshall, one will be open deep",
+    fake:   "Looks like a deep ball right — QB eyes locked on Marshall going deep RIGHT, holds safety on that side",
+    target: "Greyson going deep LEFT — single coverage, QB eyes drew safety to Marshall's side, Greyson wins 1v1",
     whenToUse: [
       'Defense cheating up on short routes (mesh, slants, bubble)',
       'Need 15+ yards — shot play opportunity',
       'Speedster vs slow DB matchup identified',
     ],
     notes: 'Pick the 1v1 matchup pre-snap. If both covered, dump to Cooper in the flat. Only throw deep if someone is OPEN.',
-    qbLook: { eyes: 'Greyson', throw: 'Marshall', tip: '👀 Look LEFT at Greyson deep → 🏈 Throw RIGHT to Marshall if his DB is beat (or vice versa)' },
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Stare at Marshall going deep RIGHT → 🏈 Throw to Greyson going deep LEFT (he has single coverage)' },
     players: {
       Braelyn:  { pos: [17.5, -3], route: [], label: '', read: 0, dashed: false },
       Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 4, dashed: true },
