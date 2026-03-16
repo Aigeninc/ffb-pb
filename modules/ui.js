@@ -5,6 +5,7 @@ import {
   getActiveSubs, getPerPlaySubs, getDisplayName, getAvailableSubs,
   saveSunlightMode, saveSubstitutions, saveActivePlaySet,
   saveActivePlaySetTag, getPlaysForTag,
+  saveActiveFamily, getFilteredPlays,
 } from './state.js';
 import { drawFrame } from './renderer.js';
 import { togglePlayPause, replay, updateTimer } from './animation.js';
@@ -23,6 +24,22 @@ const PLAY_SETS = [
   { tag: 'exotic',   label: 'Exotic',   emoji: '🔮' },
   { tag: 'all',      label: 'All',      emoji: '📋' },
   { tag: 'custom',   label: 'Custom',   emoji: '⚙️'  },
+];
+
+// ── Play Family Definitions ───────────────────────────────────
+
+const PLAY_FAMILIES = [
+  { family: 'all',          label: 'All',          emoji: '📋' },
+  { family: 'mesh',         label: 'Mesh',         emoji: '🔵' },
+  { family: 'counter-jet',  label: 'Counter/Jet',  emoji: '🟢' },
+  { family: 'quick',        label: 'Quick Game',   emoji: '🔴' },
+  { family: 'flood',        label: 'Flood',        emoji: '🌊' },
+  { family: 'shot',         label: 'Shot Plays',   emoji: '⚡' },
+  { family: 'misdirection', label: 'Misdirection', emoji: '🟡' },
+  { family: 'rpo',          label: 'RPO',          emoji: '🔄' },
+  { family: 'nrz',          label: 'NRZ',          emoji: '🟣' },
+  { family: '2back',        label: '2-Back',       emoji: '🔀' },
+  { family: 'exotic',       label: 'Exotic',       emoji: '🔮' },
 ];
 
 // Tag accent colors — used for play-btn tag dots
@@ -75,12 +92,48 @@ export function buildPlaySelector() {
 
   container.appendChild(setRow);
 
+  // ── Row 2: Family Filter Row ──────────────────────────────
+  const familyRow = document.createElement('div');
+  familyRow.className = 'play-family-row';
+
+  // Compute the tag-filtered plays (without family filter) for accurate counts
+  const tagFilteredForCount = state.activePlaySetTag === 'custom' && state.activePlaySet
+    ? PLAYS.filter(p => state.activePlaySet.has(p.name))
+    : getPlaysForTag(state.activePlaySetTag);
+
+  PLAY_FAMILIES.forEach(({ family, label, emoji }) => {
+    const count = family === 'all'
+      ? tagFilteredForCount.length
+      : tagFilteredForCount.filter(p => p.family === family).length;
+
+    // Skip families with 0 plays in current tag filter (except 'all')
+    if (family !== 'all' && count === 0) return;
+
+    const btn = document.createElement('button');
+    const isActive = state.activeFamily === family;
+    btn.className = 'family-btn' + (isActive ? ' active' : '');
+    btn.dataset.family = family;
+    btn.innerHTML =
+      `<span class="family-btn-emoji">${emoji}</span>` +
+      `<span class="family-btn-label">${label}</span>` +
+      `<span class="family-btn-count">${count}</span>`;
+
+    btn.addEventListener('click', () => {
+      state.activeFamily = family;
+      saveActiveFamily();
+      buildPlaySelector();
+    });
+    familyRow.appendChild(btn);
+  });
+
+  container.appendChild(familyRow);
+
   // ── Separator ─────────────────────────────────────────────
   const sep = document.createElement('div');
   sep.className = 'play-selector-sep';
   container.appendChild(sep);
 
-  // ── Row 2: Play buttons in a horizontal scrollable sub-row ──
+  // ── Row 3: Play buttons in a horizontal scrollable sub-row ──
   const playRow = document.createElement('div');
   playRow.className = 'play-btn-row';
 
@@ -117,10 +170,8 @@ export function buildPlaySelector() {
     return;
   }
 
-  // Normal filtered mode
-  const visiblePlays = state.activePlaySetTag === 'custom' && state.activePlaySet
-    ? PLAYS.filter(p => state.activePlaySet.has(p.name))
-    : getPlaysForTag(state.activePlaySetTag);
+  // Normal filtered mode — respects both tag filter AND family filter
+  const visiblePlays = getFilteredPlays();
 
   visiblePlays.forEach(play => {
     const i = PLAYS.indexOf(play);

@@ -132,6 +132,50 @@ Spread, Twins Right/Left, Trips Right/Left, Bunch Right/Left, Stack, Empty, RB O
 - **Styling:** All in `style.css`. Dark theme base (`#1a1a2e`), sunlight mode overrides via `.sunlight-mode` class.
 - **New features:** Add a module in `modules/`, import/wire in `app.js`.
 
+## Known UX Issues (2026-03-16)
+
+### P0: Speed Control
+- 0.25x is the ONLY usable speed for teaching kids plays
+- Should be the default speed on app load
+- Rename speed labels to teaching-oriented language: `Teach | Walk | Run | Full Speed`
+- Current `0.25x | 0.5x | 1x | 2x` means nothing to a parent coach
+
+### P0: Control Overload
+- 12 modules, growing control surface — too many icons, similar styling
+- Only Keith (the builder) can navigate it; fails the "hand to another coach" test
+- Need clear separation between:
+  - **GAME MODE** (sideline during a game): play selector, family filter, animation, speed — NOTHING ELSE
+  - **PREP MODE** (at home before practice): editor, roster, wristband, queue, game day setup
+- First-time user should see 3-4 controls max, not a cockpit
+- Icons need to be visually distinct — current set uses similar shapes/sizes
+
+### P0: Player Mode (Kid-Friendly View)
+- End goal: send a clean version to 8-10 year old players so THEY can learn plays
+- Player opens app → picks their name/avatar → sees ONLY plays they're in
+- Each play shows: FULL play animation with their route highlighted/bold + simple text instruction ("Run right, cut across left")
+- Other players' routes still visible (not dimmed) so kids understand the whole play and WHY they go where they go
+- Their player dot/name is larger/glowing so they can track themselves in the full picture
+- Coach controls which plays/families each player sees — curated assignment, not full playbook
+- Share link like `?mode=player&name=Greyson&family=mesh,counter-jet` — kid only sees assigned families
+- Coach can also assign specific plays: `?plays=Mesh+Left,Counter,Jet+Sweep`
+- ZERO coaching controls visible — no editor, no roster, no game day, no queue
+- Animation at teaching speed only (0.25x), auto-plays
+- Big friendly buttons, minimal text, maybe position-specific labels ("YOUR JOB: catch the ball here")
+- The player filter (tap color to isolate) is the seed — wrap it in a kid-friendly shell
+- This is the version that gets shared with the team
+
+### P1: Three-Mode Architecture
+- **Player Mode** — kid-friendly, pick your name, see your routes (DEFAULT when shared)
+- **Coach Mode** — sideline game day, family filter, play calling, speed control
+- **Prep Mode** — editor, roster, wristband, queue, game day setup, full toolbox
+- URL param or toggle to switch: `?mode=player&name=Greyson`
+- Player Mode should be the default shareable link
+
+### P1: Information Hierarchy
+- Play names, tags, families, dots, subs indicators — too much info per button
+- On a phone in sunlight, coach needs: play name + family color. That's it.
+- Everything else is progressive disclosure (tap for details)
+
 ## Deployment
 
 GitHub Pages from `main` branch. No CI/CD pipeline — just push.

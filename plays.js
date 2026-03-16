@@ -1,4 +1,4 @@
-// plays.js — 35 flag football plays (25 base + 5 double-back + 5 new 2-back plays)
+// plays.js — 44 flag football plays (25 base + 5 double-back + 5 2-back + 3 exotic + 6 new concept plays)
 // Coordinates: X = 0-35 (sideline to sideline), Y = negative behind LOS, positive downfield
 // LOS is at Y=0
 
@@ -19,6 +19,7 @@ const PLAYS = [
     name: 'Mesh',
     formation: 'Spread',
     tags: ["core","nrz"],
+    family: 'mesh',
     fake:   "Looks like a crossing route RIGHT — QB eyes locked on Marshall going right",
     target: "Greyson crossing LEFT — defenders follow QB eyes, Greyson pops free on opposite cross",
     whenToUse: [
@@ -50,6 +51,7 @@ const PLAYS = [
     name: 'Flood Fake',
     formation: 'Twins Right',
     tags: [],
+    family: 'flood',
     fake:   "Looks EXACTLY like Flood Right — same formation, same Twins Right alignment, same QB eye set toward corner",
     target: "Cooper deep post LEFT — defense cheats hard right covering the corner, entire left side opens",
     whenToUse: [
@@ -82,6 +84,7 @@ const PLAYS = [
     name: 'Flood Right',
     formation: 'Twins Right',
     tags: ["core"],
+    family: 'flood',
     fake:   "Looks like a quick out to Marshall — QB stares at Marshall on the short out route",
     target: "Greyson deep corner — Marshall freezes the flat defender, corner route breaks open behind him",
     whenToUse: [
@@ -111,6 +114,7 @@ const PLAYS = [
     name: 'Reverse',
     formation: 'Spread',
     tags: ["extended"],
+    family: 'misdirection',
     fake:   "Looks like a run right — Braelyn fake handoff to Marshall going right, everyone flows right",
     target: "Greyson taking reverse left — defense crashes right on fake, entire left edge vacated",
     whenToUse: [
@@ -147,6 +151,7 @@ const PLAYS = [
     name: 'RPO Slant',
     formation: 'Spread',
     tags: ["core"],
+    family: 'rpo',
     fake:   "Looks like a run — Marshall in backfield, Braelyn at mesh point for live handoff read",
     target: "Greyson slant — linebackers step up for run, vacate slant window behind them",
     whenToUse: [
@@ -181,6 +186,7 @@ const PLAYS = [
     name: 'Quick Slants NRZ',
     formation: 'Spread',
     tags: ["extended","nrz"],
+    family: 'nrz',
     fake:   "Looks like a pass to Marshall slanting right — QB eye lock right",
     target: "Greyson slanting left — defender bites on QB eyes, opposite slant opens immediately",
     showNRZ: true,
@@ -211,6 +217,7 @@ const PLAYS = [
     name: 'Flat-Wheel',
     formation: 'RB Offset Right',
     tags: ["extended"],
+    family: 'nrz',
     fake:   "Looks like a flat pass to Cooper right — QB locks eyes on Cooper releasing to flat",
     target: "Marshall wheeling deep up sideline — corner abandons deep to cover flat, wheel goes untouched",
     showNRZ: true,
@@ -242,6 +249,7 @@ const PLAYS = [
     name: 'Braelyn Lateral',
     formation: 'Spread (Marshall offset)',
     tags: ["extended"],
+    family: 'quick',
     fake:   "Looks like a normal pass play — defense keys Braelyn as QB, assigns pass coverage",
     target: "Braelyn becomes a RECEIVER — nobody covers the QB going out for a pass because it never happens",
     whenToUse: [
@@ -276,6 +284,7 @@ const PLAYS = [
     name: 'Flood Left',
     formation: 'Twins Left',
     tags: [],
+    family: 'flood',
     fake:   "Looks like a quick out to Marshall left — QB stares at Marshall on the short out",
     target: "Greyson deep corner left — defense cheated right all game, left corner breaks wide open",
     whenToUse: [
@@ -305,6 +314,7 @@ const PLAYS = [
     name: 'Hitch & Go',
     formation: 'Spread',
     tags: [],
+    family: 'shot',
     fake:   "Looks like a hitch route — Greyson takes 3 steps, hesitates, DB's eyes light up and he bites",
     target: "Greyson burning deep — DB's momentum carries him toward LOS, Greyson's already gone",
     whenToUse: [
@@ -336,6 +346,7 @@ const PLAYS = [
     name: 'Screen',
     formation: 'Spread',
     tags: ["core"],
+    family: 'misdirection',
     fake:   "Looks like a deep pass play — pump fake deep, WRs run full go routes to clear defenders",
     target: "Cooper screen right — rush defense flies past QB, Cooper has open field with nobody between him and the end zone",
     whenToUse: [
@@ -370,6 +381,7 @@ const PLAYS = [
     name: 'Reverse Fake',
     formation: 'Spread',
     tags: [],
+    family: 'misdirection',
     fake:   "Looks EXACTLY like Reverse — same Cooper motion across formation, same fake handoff pump",
     target: "Greyson slant RIGHT — defense sprints left chasing fake reverse, right side wide open",
     whenToUse: [
@@ -405,6 +417,7 @@ const PLAYS = [
     name: 'Fade',
     formation: 'Spread',
     tags: [],
+    family: 'shot',
     fake:   "Looks like a slant route to Greyson — QB stares at Greyson setting up inside",
     target: "Marshall fade to back corner — slant look holds inside defender, fade opens to back pylon",
     showNRZ: true,
@@ -439,6 +452,7 @@ const PLAYS = [
     name: 'Mesh Wheel',
     formation: 'Spread',
     tags: [],
+    family: 'mesh',
     fake:   "Looks EXACTLY like Mesh — same Cooper motion from right, same crossing action from Greyson",
     target: "Cooper wheel deep up sideline — DB bites inside expecting the cross, Cooper turns it upfield untouched",
     whenToUse: [
@@ -474,6 +488,7 @@ const PLAYS = [
     name: 'Slant & Go',
     formation: 'Spread',
     tags: [],
+    family: 'shot',
     fake:   "Looks like Quick Slants NRZ — Greyson takes hard slant angle for 3 yards, DB commits inside",
     target: "Greyson turning the slant into a go route — DB's inside momentum makes him un-catchable going outside",
     whenToUse: [
@@ -508,6 +523,7 @@ const PLAYS = [
     name: 'Jet Sweep',
     formation: 'Spread',
     tags: ["core"],
+    family: 'counter-jet',
     fake:   "Looks like an inside run — Mason fakes up middle, Marshall pulls safety deep",
     target: "Greyson on right edge — inside fake pulls defenders in, Greyson hits wide-open perimeter",
     isRunPlay: true,
@@ -544,6 +560,7 @@ const PLAYS = [
     name: 'RB Draw',
     formation: 'Spread',
     tags: [],
+    family: 'misdirection',
     fake:   "Looks like a deep pass play — Braelyn full drop-back, WRs sprint go routes, everyone sells pass",
     target: "Greyson delayed draw up middle — pass rush over-commits hard, entire middle lane vacated",
     isRunPlay: true,
@@ -578,6 +595,7 @@ const PLAYS = [
     name: 'End Around',
     formation: 'Spread',
     tags: [],
+    family: 'misdirection',
     fake:   "Looks like a run or pass going left — Cooper and Marshall both take steps toward left side",
     target: "Greyson end around right edge — defense follows fake left flow, entire right perimeter opens",
     isRunPlay: true,
@@ -613,6 +631,7 @@ const PLAYS = [
     name: 'RPO Flood',
     formation: 'Twins Right',
     tags: [],
+    family: 'rpo',
     fake:   "Looks like a run right — Greyson in sweep path, Braelyn at mesh point ready to give",
     target: "Live read: give Greyson run if edge open, OR keep and throw Marshall corner — defense is wrong either way",
     whenToUse: [
@@ -648,6 +667,7 @@ const PLAYS = [
     name: 'Triple Option',
     formation: 'Spread',
     tags: [],
+    family: 'rpo',
     fake:   "Looks like a run right — Greyson in sweep path forces defense to commit to run or pass",
     target: "Three answers: Greyson run, Marshall deep, or Cooper out — defense must be wrong because one is always open",
     whenToUse: [
@@ -684,6 +704,7 @@ const PLAYS = [
     name: 'Bubble Screen',
     formation: 'Spread',
     tags: ["nrz"],
+    family: 'quick',
     fake:   "Looks like a deep pass — Greyson and Marshall sprint full go routes to clear all defenders deep",
     target: "Cooper bubble right — defenders sucked deep on go routes, catch behind LOS and run in space",
     whenToUse: [
@@ -718,6 +739,7 @@ const PLAYS = [
     name: 'Quick Hitch',
     formation: 'Spread',
     tags: ["nrz"],
+    family: 'quick',
     fake:   "Looks like a flat pass to Cooper — QB glances right before looking back left",
     target: "Greyson 3-step hitch — safety frozen by flat glance, throw before corner can close",
     whenToUse: [
@@ -751,6 +773,7 @@ const PLAYS = [
     name: 'Jet Bubble',
     formation: 'Spread',
     tags: [],
+    family: 'counter-jet',
     fake:   "Looks EXACTLY like Jet Sweep — Greyson full speed motion right, defense sprints right with him",
     target: "Cooper bubble LEFT — defense is running right, entire left side wide open on quick screen",
     whenToUse: [
@@ -787,6 +810,7 @@ const PLAYS = [
     name: 'Fake Jet Draw',
     formation: 'Spread',
     tags: [],
+    family: 'counter-jet',
     fake:   "Looks EXACTLY like Jet Sweep — same Greyson motion, same Braelyn fake handoff at mesh point",
     target: "Mason draw up middle — every defender sprints right chasing Greyson, middle completely empty",
     isRunPlay: true,
@@ -824,6 +848,7 @@ const PLAYS = [
     name: 'Counter Sweep',
     formation: 'Double-Back',
     tags: ["extended","2back"],
+    family: 'counter-jet',
     fake:   "Looks like a run left — Marshall sells fake hard going left, linebackers follow",
     target: "Greyson right edge — defense bites left on Marshall fake, right edge opens immediately",
     isRunPlay: true,
@@ -858,6 +883,7 @@ const PLAYS = [
     name: 'Counter Left',
     formation: 'Double-Back',
     tags: ["2back"],
+    family: 'counter-jet',
     fake:   "Looks like Counter Sweep going right — Greyson sells fake hard going right",
     target: "Marshall left edge — mirror of Counter Sweep, defense bites right and Marshall has the whole left",
     isRunPlay: true,
@@ -892,6 +918,7 @@ const PLAYS = [
     name: 'Play Action Boot',
     formation: 'Double-Back',
     tags: ["2back"],
+    family: 'counter-jet',
     fake:   "Looks EXACTLY like Counter Sweep — full double-back run action to Greyson going right",
     target: "Cooper flat left on bootleg — defense crashes right on run fake, entire boot side opens",
     whenToUse: [
@@ -927,6 +954,7 @@ const PLAYS = [
     name: 'Hook & Ladder',
     formation: 'Double-Back',
     tags: ["2back"],
+    family: 'misdirection',
     fake:   "Looks like a normal short hook pass to Greyson — 5 yards, routine completion",
     target: "Marshall trailing behind — defense closes hard on Greyson at hook, he immediately laterals to Marshall in open field",
     whenToUse: [
@@ -962,6 +990,7 @@ const PLAYS = [
     name: 'I-Bone',
     formation: 'Stack / I-Bone',
     tags: ["2back"],
+    family: '2back',
     fake:   "Looks like a run play — both backs stacked in I-formation, defense must pick a gap to fill",
     target: "Whichever back defense ignores — backs split opposite directions, one is always unaccounted for",
     isRunPlay: true,
@@ -997,6 +1026,7 @@ const PLAYS = [
     name: 'Speed Pitch',
     formation: 'Double-Back',
     tags: ["2back"],
+    family: '2back',
     fake:   "Looks like a run left — Marshall sells hard fake going left, backside defender freezes",
     target: "Greyson speed pitch right edge — fastest ball delivery possible, edge open before defense reacts",
     isRunPlay: true,
@@ -1031,6 +1061,7 @@ const PLAYS = [
     name: 'Split Sweep',
     formation: 'Double-Back',
     tags: ["2back"],
+    family: '2back',
     fake:   "Looks like Marshall is the ball carrier — he leads the sweep, defense keys on him first",
     target: "Greyson following 2 yards behind — defense commits to Marshall, Greyson slips into open lane",
     isRunPlay: true,
@@ -1065,6 +1096,7 @@ const PLAYS = [
     name: 'Counter Pass',
     formation: 'Double-Back',
     tags: ["2back"],
+    family: '2back',
     fake:   "Looks EXACTLY like Counter Sweep — full double-back run fake, both backs sell the run hard",
     target: "Cooper deep post — defense bites hard on run action, deep middle completely vacated",
     whenToUse: [
@@ -1099,6 +1131,7 @@ const PLAYS = [
     name: 'Dual Wheel',
     formation: 'Double-Back',
     tags: ["2back"],
+    family: '2back',
     fake:   "Looks like a run play — both backs start in run alignment, defense readies for run",
     target: "Greyson wheel deep up sideline — defense in run-stop mode, backs leak out into pass routes undetected",
     whenToUse: [
@@ -1133,6 +1166,7 @@ const PLAYS = [
     name: 'Split Back Screen',
     formation: 'Double-Back',
     tags: ["2back"],
+    family: '2back',
     fake:   "Looks like Counter Sweep going right — Greyson sells fake right, defense chases",
     target: "Marshall screen LEFT — opposite direction, defense all wrong side, entire left open for Marshall",
     whenToUse: [
@@ -1167,6 +1201,7 @@ const PLAYS = [
     name: 'Screen Fake Post',
     formation: 'Spread',
     tags: [],
+    family: 'shot',
     fake:   "Looks EXACTLY like Screen — same pump fake, same Cooper bubble motion, same pre-snap look",
     target: "Greyson deep post — defense crashes screen hard, deep middle completely vacated",
     whenToUse: [
@@ -1203,6 +1238,7 @@ const PLAYS = [
     name: 'Wildcat',
     formation: 'Wildcat (Direct Snap)',
     tags: ['exotic'],
+    family: 'exotic',
     fake:   "Looks like a normal play — defense keys on Braelyn at QB position, assigns coverage based on her",
     target: "GREYSON gets the direct snap and is actually the QB — defense is in wrong assignment when fastest player gets ball",
     isRunPlay: true,
@@ -1239,6 +1275,7 @@ const PLAYS = [
     name: 'Swinging Gate',
     formation: 'Swinging Gate (Cluster Left)',
     tags: ['exotic'],
+    family: 'exotic',
     fake:   "Looks like all action is coming from the left cluster — defense scrambles to align to bunch left",
     target: "Cooper isolated 1-on-1 far right — defense followed the bunch, entire right side abandoned before they can adjust",
     whenToUse: [
@@ -1274,6 +1311,7 @@ const PLAYS = [
     name: 'Bunch Goal Line',
     formation: 'Bunch Right (Goal Line)',
     tags: ['exotic', 'nrz'],
+    family: 'nrz',
     fake:   "Looks like a 3-receiver bunch route going right — defenders follow receivers into bunch traffic",
     target: "Whoever pops free from the natural picks — defenders tangle with each other, one receiver always breaks clean",
     showNRZ: true,
@@ -1300,6 +1338,224 @@ const PLAYS = [
     specialLabels: [
       { x: 27, y: 0, text: 'BUNCH — 3 PICKS\nNO HEIGHT NEEDED', color: '#2dd4bf' },
       { x: 18, y: 7, text: '★ SCHEME SEP\nOPEN BY DESIGN', color: '#22c55e' },
+    ],
+  },
+
+  // ── 39. MESH LEFT (Predetermined) ──────────────────────────────────────
+  // Braelyn's eyes lock RIGHT on Marshall. Throw goes LEFT to Greyson.
+  // Her staring tendency IS the play design — holds defenders right, Greyson pops free left.
+  {
+    name: 'Mesh Left',
+    formation: 'Spread',
+    tags: ['core'],
+    family: 'mesh',
+    fake:   "QB eyes locked RIGHT on Marshall crossing right — defense follows her eyes",
+    target: "Greyson crossing LEFT — defenders pulled right by QB eyes, entire left side opens",
+    whenToUse: [
+      'Man coverage — crossing creates natural picks',
+      'Default mesh call — predetermined throw LEFT',
+      'Braelyn staring tendency weaponized as a look-off',
+    ],
+    notes: 'PRE-DETERMINED throw LEFT. Braelyn told in huddle: eyes RIGHT, throw LEFT. Her natural stare-down becomes a built-in look-off.',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Lock eyes RIGHT on Marshall → 🏈 Throw LEFT to Greyson crossing' },
+    players: {
+      Braelyn:  { pos: [17.5, -3], route: [], label: '', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],  route: [[22, 3], [27, 5]], label: 'CHECK', read: 3, dashed: true },
+      Greyson:  { pos: [28, 0],    route: [[28, 5], [4, 5]], label: 'MESH←', read: 1, dashed: false },
+      Marshall: { pos: [7, 0],     route: [[7, 6], [31, 6]], label: 'MESH→', read: 0, dashed: false,
+                  motion: { from: [3, 0], to: [7, 0] } },
+      Cooper:   { pos: [17.5, -5.5], route: [[17.5, -3.5], [6, 1]], label: 'FLAT', read: 2, dashed: true },
+    },
+    defense: [[10, 5], [17.5, 8], [25, 5], [8, 13], [27, 13]],
+    timing: { 1: 1.5, 2: 3.0, 3: 4.0 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Greyson', time: 1.5, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 28, y: 2, text: '👀 EYES HERE\nHOLD DEFENSE →', color: '#f59e0b' },
+      { x: 4, y: 7, text: '★ THROW HERE\nGREYSON OPEN', color: '#dc2626' },
+    ],
+  },
+
+  // ── 40. MESH RIGHT (Predetermined) ─────────────────────────────────────
+  // Mirror of Mesh Left. Eyes lock LEFT on Greyson, throw RIGHT to Marshall.
+  {
+    name: 'Mesh Right',
+    formation: 'Spread',
+    tags: ['core'],
+    family: 'mesh',
+    fake:   "QB eyes locked LEFT on Greyson crossing left — defense follows her eyes",
+    target: "Marshall crossing RIGHT — defenders pulled left by QB eyes, entire right side opens",
+    whenToUse: [
+      'Man coverage — crossing creates natural picks',
+      'Default mesh call — predetermined throw RIGHT',
+      'Mirror of Mesh Left — keeps defense guessing which side',
+    ],
+    notes: 'PRE-DETERMINED throw RIGHT. Mirror of Mesh Left. Eyes LEFT, throw RIGHT.',
+    qbLook: { eyes: 'Greyson', throw: 'Marshall', tip: '👀 Lock eyes LEFT on Greyson → 🏈 Throw RIGHT to Marshall crossing' },
+    players: {
+      Braelyn:  { pos: [17.5, -3], route: [], label: '', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 3, dashed: true },
+      Greyson:  { pos: [7, 0],     route: [[7, 6], [31, 6]], label: 'MESH→', read: 0, dashed: false },
+      Marshall: { pos: [28, 0],    route: [[28, 5], [4, 5]], label: 'MESH←', read: 1, dashed: false,
+                  motion: { from: [32, 0], to: [28, 0] } },
+      Cooper:   { pos: [17.5, -5.5], route: [[17.5, -3.5], [29, 1]], label: 'FLAT', read: 2, dashed: true },
+    },
+    defense: [[10, 5], [17.5, 8], [25, 5], [8, 13], [27, 13]],
+    timing: { 1: 1.5, 2: 3.0, 3: 4.0 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Marshall', time: 1.5, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 7, y: 2, text: '👀 EYES HERE\n← HOLD DEFENSE', color: '#dc2626' },
+      { x: 31, y: 7, text: '★ THROW HERE\nMARSHALL OPEN', color: '#f59e0b' },
+    ],
+  },
+
+  // ── 41. MESH DEEP ──────────────────────────────────────────────────────
+  // Mesh crossing at 5yd holds defenders + Cooper streaks vertical behind them.
+  // Punishes defense for cheating on short mesh crosses.
+  {
+    name: 'Mesh Deep',
+    formation: 'Spread',
+    tags: [],
+    family: 'mesh',
+    fake:   "Looks like standard mesh — two crossers at 5 yards, defense cheats up to jump the short throw",
+    target: "Cooper deep post — while defense bites on mesh crossers, Cooper runs behind everyone",
+    whenToUse: [
+      'Defense cheating up on mesh crosses — punish them deep',
+      'After running Mesh Left/Right 3+ times — they expect short',
+      'Need a big play from the mesh formation look',
+    ],
+    notes: 'Set up by running Mesh Left/Right first. When DBs jump the 5yd crossers, Cooper is gone behind them. Braelyn stares at mesh, then throws deep.',
+    qbLook: { eyes: 'Greyson', throw: 'Cooper', tip: '👀 Eyes on mesh crossers (sell it!) → 🏈 Throw deep to Cooper when DB bites on cross' },
+    players: {
+      Braelyn:  { pos: [17.5, -3], route: [], label: '', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],  route: [[22, 3], [27, 5]], label: 'CHECK', read: 4, dashed: true },
+      Greyson:  { pos: [4, 0],     route: [[4, 5], [32, 5]], label: 'MESH', read: 2, dashed: false },
+      Marshall: { pos: [24, -1],   route: [[24, 6], [3, 6]], label: 'MESH', read: 3, dashed: false,
+                  motion: { from: [31, -1], to: [24, -1] } },
+      Cooper:   { pos: [17.5, -5.5], route: [[17.5, -3], [17.5, 5], [14, 12], [17.5, 18]], label: 'DEEP POST!', read: 1, dashed: false },
+    },
+    defense: [[10, 5], [17.5, 8], [25, 5], [8, 13], [27, 13]],
+    timing: { 1: 2.5, 2: 1.5, 3: 2.0, 4: 4.0 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Cooper', time: 2.5, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 17.5, y: 5, text: 'MESH HOLDS D\nBITE ON SHORT →', color: '#f59e0b' },
+      { x: 17.5, y: 19, text: '★ COOPER DEEP\nWIDE OPEN', color: '#2dd4bf' },
+    ],
+  },
+
+  // ── 42. DOUBLE GO ──────────────────────────────────────────────────────
+  // Both outside WRs streak deep. QB picks the better 1v1 matchup. Cooper dumps to flat as safety valve.
+  {
+    name: 'Double Go',
+    formation: 'Spread',
+    tags: [],
+    family: 'shot',
+    fake:   "Looks like a deep ball — two receivers sprinting downfield, defense has to pick who to cover",
+    target: "Whichever WR has the better 1-on-1 matchup — Greyson or Marshall, one will be open deep",
+    whenToUse: [
+      'Defense cheating up on short routes (mesh, slants, bubble)',
+      'Need 15+ yards — shot play opportunity',
+      'Speedster vs slow DB matchup identified',
+    ],
+    notes: 'Pick the 1v1 matchup pre-snap. If both covered, dump to Cooper in the flat. Only throw deep if someone is OPEN.',
+    qbLook: { eyes: 'Greyson', throw: 'Marshall', tip: '👀 Look LEFT at Greyson deep → 🏈 Throw RIGHT to Marshall if his DB is beat (or vice versa)' },
+    players: {
+      Braelyn:  { pos: [17.5, -3], route: [], label: '', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 5]], label: 'CHECK', read: 4, dashed: true },
+      Greyson:  { pos: [5, 0],     route: [[5, 5], [5, 12], [5, 20]], label: 'GO!', read: 1, dashed: false },
+      Marshall: { pos: [30, 0],    route: [[30, 5], [30, 12], [30, 20]], label: 'GO!', read: 2, dashed: false },
+      Cooper:   { pos: [17.5, -5.5], route: [[17.5, -3.5], [8, 1]], label: 'FLAT (safe)', read: 3, dashed: true },
+    },
+    defense: [[8, 5], [17.5, 7], [27, 5], [5, 14], [30, 14]],
+    timing: { 1: 2.5, 2: 2.5, 3: 1.5, 4: 4.0 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Greyson', time: 2.5, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 17.5, y: 20, text: '🎯 PICK THE\n1-ON-1 WINNER', color: '#22c55e' },
+    ],
+  },
+
+  // ── 43. FLEA FLICKER ───────────────────────────────────────────────────
+  // Fake handoff to Greyson → Greyson pitches back → QB throws deep while defense bites on run.
+  {
+    name: 'Flea Flicker',
+    formation: 'Spread',
+    tags: ['exotic'],
+    family: 'shot',
+    fake:   "Looks like a run — handoff to Greyson, defense crashes forward to pull flags",
+    target: "Marshall deep — defense bit on run fake, secondary vacated, Marshall sprinting behind everyone",
+    whenToUse: [
+      'Defense crashing on run plays — punish with play action deep',
+      'Once per game MAX — trick play, save for the right moment',
+      'Need a momentum-shifting big play',
+    ],
+    notes: '⚠ ONCE PER GAME MAX. Fake handoff to Greyson → Greyson pitches back to Braelyn → throw deep to Marshall. Greyson must lateral IMMEDIATELY, no hesitation.',
+    qbLook: { eyes: 'Greyson', throw: 'Marshall', tip: '👀 Sell the handoff to Greyson → 🏈 Get pitch back → throw deep to Marshall' },
+    players: {
+      Braelyn:  { pos: [17.5, -3], route: [[17.5, -3], [14, -3], [14, -3]], label: '', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],  route: [], label: '', read: 0, dashed: false },
+      Greyson:  { pos: [12, -2],   route: [[17.5, -2], [20, -1], [20, -1]], label: 'FAKE+PITCH', read: 0, dashed: false },
+      Marshall: { pos: [30, 0],    route: [[30, 6], [30, 12], [27, 20]], label: 'GO DEEP!', read: 1, dashed: false },
+      Cooper:   { pos: [5, 0],     route: [[5, 6], [5, 12], [8, 18]], label: 'GO DEEP!', read: 2, dashed: false },
+    },
+    defense: [[10, 4], [17.5, 7], [25, 4], [8, 13], [27, 13]],
+    timing: { 1: 3.0, 2: 3.0 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Greyson', time: 0.5, type: 'handoff' },
+      { from: 'Greyson', to: 'Braelyn', time: 1.2, type: 'lateral' },
+      { from: 'Braelyn', to: 'Marshall', time: 3.0, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 17.5, y: -1, text: '🔄 FAKE RUN\nPITCH BACK', color: '#dc2626' },
+      { x: 28, y: 20, text: '★ MARSHALL DEEP\nD BIT ON RUN', color: '#f59e0b' },
+    ],
+  },
+
+  // ── 44. FLAT DUMP ──────────────────────────────────────────────────────
+  // Simplest play in the book. Snap, dump to Greyson in the flat, let him run.
+  // 1-count throw. Anti-blitz, confidence builder, gets ball to your best player.
+  {
+    name: 'Flat Dump',
+    formation: 'Spread',
+    tags: ['core'],
+    family: 'quick',
+    fake:   "Looks like a pass play developing — WRs running routes pulls defenders deep",
+    target: "Greyson in the flat — catch in space with room to run, WR routes clear out defenders",
+    whenToUse: [
+      'Get ball to Greyson in space — let the athlete do the work',
+      'Defense blitzing — ball out in 1 second',
+      'Need a safe, easy completion to build confidence',
+      'First play of a drive — high percentage, no risk',
+    ],
+    notes: 'THE simplest play. Snap → dump to Greyson. 1 count. WRs run clearing routes to pull defenders away. Greyson catches in space and makes plays.',
+    qbLook: { eyes: 'Marshall', throw: 'Greyson', tip: '👀 Glance RIGHT at Marshall → 🏈 Immediately dump LEFT to Greyson in flat' },
+    players: {
+      Braelyn:  { pos: [17.5, -3], route: [], label: '', read: 0, dashed: false },
+      Lenox:    { pos: [17.5, 0],  route: [[12, 3], [7, 6]], label: 'CHECK', read: 3, dashed: true },
+      Greyson:  { pos: [10, -2],   route: [[6, 0], [3, 3]], label: 'FLAT!', read: 1, dashed: false },
+      Marshall: { pos: [30, 0],    route: [[30, 6], [30, 14]], label: 'CLEAR', read: 0, dashed: false },
+      Cooper:   { pos: [5, 0],     route: [[5, 6], [5, 14]], label: 'CLEAR', read: 2, dashed: true },
+    },
+    defense: [[10, 5], [17.5, 7], [25, 5], [8, 13], [27, 13]],
+    timing: { 1: 0.8, 2: 3.0, 3: 4.0 },
+    ballPath: [
+      { from: 'Lenox', to: 'Braelyn', time: 0, type: 'snap' },
+      { from: 'Braelyn', to: 'Greyson', time: 0.8, type: 'throw' },
+    ],
+    specialLabels: [
+      { x: 3, y: 5, text: '★ GREYSON\nIN SPACE', color: '#dc2626' },
+      { x: 28, y: 14, text: 'CLEARING\nROUTES →', color: '#666' },
     ],
   },
 ];

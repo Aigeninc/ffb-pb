@@ -74,6 +74,9 @@ export const state = {
   // ── Active Play Set Tag (predefined set selector) ─────────
   activePlaySetTag: 'core',  // 'core'|'extended'|'2back'|'nrz'|'exotic'|'all'|'custom'
 
+  // ── Active Family Filter ───────────────────────────────────
+  activeFamily: 'all',  // 'all'|'mesh'|'counter-jet'|'quick'|'flood'|'shot'|'misdirection'|'rpo'|'nrz'|'2back'|'exotic'
+
   // ── Active Play Set (game day filter / custom pick mode) ──
   activePlaySet: null,  // null = show all, Set of play names = show only these
   activePlaySetEditing: false, // true when pick-mode is active
@@ -267,6 +270,37 @@ export function loadActivePlaySetTag() {
     const raw = localStorage.getItem('playbook:playSetTag');
     if (raw) state.activePlaySetTag = raw;
   } catch (e) {}
+}
+
+// ── Active Family Filter ──────────────────────────────────────
+
+export function saveActiveFamily() {
+  try {
+    localStorage.setItem('playbook:activeFamily', state.activeFamily);
+  } catch (e) {}
+}
+
+export function loadActiveFamily() {
+  try {
+    const raw = localStorage.getItem('playbook:activeFamily');
+    if (raw) state.activeFamily = raw;
+  } catch (e) {}
+}
+
+// Get plays filtered by BOTH the active tag set AND the active family
+export function getFilteredPlays() {
+  // First: apply the tag/set filter
+  let plays;
+  if (state.activePlaySetTag === 'custom' && state.activePlaySet) {
+    plays = PLAYS.filter(function(p) { return state.activePlaySet.has(p.name); });
+  } else {
+    plays = getPlaysForTag(state.activePlaySetTag);
+  }
+  // Second: apply family filter (if not 'all')
+  if (state.activeFamily !== 'all') {
+    plays = plays.filter(function(p) { return p.family === state.activeFamily; });
+  }
+  return plays;
 }
 
 // ── Active Play Set (game day filter) ─────────────────────────
