@@ -108,6 +108,12 @@
       <div id="when-to-use"></div>
       <div id="play-notes"></div>
     </div>
+
+    <!-- Player Mode Navigation Buttons -->
+    <div id="player-nav" class="player-nav" style="display:none">
+      <button class="player-nav-btn" id="btn-prev-play">◀ Previous</button>
+      <button class="player-nav-btn" id="btn-next-play">Next ▶</button>
+    </div>
   </div>
 
   <!-- Game Day Panel Backdrop -->
@@ -194,6 +200,12 @@
 
     </div><!-- /.panel-body -->
   </div><!-- /#roster-panel -->
+
+  <!-- Player Picker Overlay -->
+  <div id="player-picker" class="player-picker-overlay" style="display:none">
+    <div class="player-picker-title">Who are you?</div>
+    <div class="player-picker-grid" id="player-picker-grid"></div>
+  </div>
 
   <script src="plays.js"></script>
   <script type="module" src="app.js"></script>

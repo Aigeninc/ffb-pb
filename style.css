@@ -1763,3 +1763,75 @@ body[data-mode="coach"] .family-btn-emoji { font-size: 16px; }
 /* Coach mode: hide set row separator if set row is hidden */
 body[data-mode="coach"] .play-set-row { display: none; }
 body[data-mode="coach"] .play-selector-sep:first-of-type { display: none; }
+
+/* ── Player Picker Overlay ─────────────────────────────────── */
+.player-picker-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 10, 30, 0.95);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.player-picker-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+}
+.player-picker-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 400px;
+  padding: 0 20px;
+}
+.player-picker-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 3px solid transparent;
+  border-radius: 16px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  min-width: 90px;
+}
+.player-picker-btn:active { transform: scale(0.95); }
+.player-picker-btn .picker-dot {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+.player-picker-btn .picker-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* ── Player Nav Buttons ────────────────────────────────────── */
+.player-nav {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 16px;
+}
+.player-nav-btn {
+  background: var(--surface2);
+  color: #fff;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 120px;
+  transition: transform 0.1s;
+}
+.player-nav-btn:active { transform: scale(0.95); }

@@ -3,7 +3,7 @@
 
 import {
   state, getAnimStart, loadQueueState, loadPreferences, loadCustomPlays, loadSubstitutions,
-  loadActivePlaySet, loadActivePlaySetTag, parseURLParams,
+  loadActivePlaySet, loadActivePlaySetTag, parseURLParams, getPlayerModePlays,
 } from './modules/state.js';
 
 import {
@@ -17,7 +17,7 @@ import {
 
 import {
   buildPlaySelector, buildPlayerFilter, buildControls, updateInfoPanel, applyModeVisibility,
-  setSelectPlayFn as uiSetSelectPlay,
+  setSelectPlayFn as uiSetSelectPlay, showPlayerPicker,
 } from './modules/ui.js';
 
 import {
@@ -217,11 +217,48 @@ function init() {
     updateTimer();
   });
 
+  // Show player picker if in player mode with no name
+  if (state.appMode === 'player' && !state.playerModeName) {
+    const savedName = localStorage.getItem('playbook:playerName');
+    if (savedName && PLAYERS[savedName]) {
+      state.playerModeName = savedName;
+    } else {
+      showPlayerPicker();
+    }
+  }
+
+  // Player mode: prev/next nav buttons
+  if (state.appMode === 'player') {
+    const navEl = document.getElementById('player-nav');
+    if (navEl) navEl.style.display = '';
+
+    const prevBtn = document.getElementById('btn-prev-play');
+    const nextBtn = document.getElementById('btn-next-play');
+    const playerPlays = getPlayerModePlays();
+
+    if (prevBtn) prevBtn.addEventListener('click', () => {
+      const currentIdx = playerPlays.findIndex(p => PLAYS.indexOf(p) === state.currentPlayIdx);
+      const prevIdx = currentIdx > 0 ? currentIdx - 1 : playerPlays.length - 1;
+      selectPlay(PLAYS.indexOf(playerPlays[prevIdx]));
+    });
+
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+      const currentIdx = playerPlays.findIndex(p => PLAYS.indexOf(p) === state.currentPlayIdx);
+      const nextIdx = currentIdx < playerPlays.length - 1 ? currentIdx + 1 : 0;
+      selectPlay(PLAYS.indexOf(playerPlays[nextIdx]));
+    });
+  }
+
   // Start from pre-snap and auto-play
   state.animTime = getAnimStart(PLAYS[state.currentPlayIdx]);
   drawFrame();
   updateTimer();
   setTimeout(() => startAnimation(), 500);
+
+  // Auto-play first animation in player mode
+  if (state.appMode === 'player' && state.playerModeName) {
+    setTimeout(() => replay(), 500);
+  }
 }
 
 // Modules are always deferred; DOM is ready by the time this runs

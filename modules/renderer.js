@@ -524,8 +524,10 @@ function drawRoutes(play) {
       }
     }
 
+    const isActivePlayerRoute = state.appMode === 'player' && state.playerModeName && name === state.playerModeName;
     ctx.strokeStyle = color;
     ctx.lineWidth = pd.dashed ? (state.sunlightMode ? 4 : 3) : (state.sunlightMode ? 7 : 4.5);
+    if (isActivePlayerRoute) ctx.lineWidth += 2;
     if (pd.dashed) ctx.setLineDash([8, 5]);
     ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke(); ctx.setLineDash([]);
 
@@ -567,10 +569,26 @@ function drawPlayers(play) {
     const color = getPlayerColor(name);
     const currentPos = getPlayerPosition(play, name, pd);
     const [cx, cy] = fieldToCanvas(currentPos[0], currentPos[1]);
-    const r = state.sunlightMode ? 19 : 15;
+    let r = state.sunlightMode ? 19 : 15;
 
     ctx.globalAlpha = ghosted ? 0.2 : 1;
     const dispName = getPlayerDisplayName(name);
+
+    // Player mode: pulsing glow ring for the active player
+    const isActivePlayer = state.appMode === 'player' && state.playerModeName && name === state.playerModeName;
+    if (isActivePlayer) {
+      const pulse = 0.4 + 0.3 * Math.sin((state.animTime || 0) * 4);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + 10, 0, Math.PI * 2);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 4;
+      ctx.globalAlpha = pulse;
+      ctx.stroke();
+      ctx.restore();
+      r = Math.round(r * 1.5);
+    }
+
     ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fillStyle = color; ctx.fill();
     ctx.strokeStyle = (PLAYERS[dispName] && PLAYERS[dispName].border) || '#fff';
@@ -578,7 +596,8 @@ function drawPlayers(play) {
 
     const tc = (color === '#2dd4bf' || color === '#f59e0b' || color === '#f5d742') ? '#000' : '#fff';
     ctx.fillStyle = tc;
-    ctx.font = `bold ${state.sunlightMode ? 11 : 9}px system-ui`;
+    const nameFontSize = isActivePlayer ? 13 : (state.sunlightMode ? 11 : 9);
+    ctx.font = `bold ${nameFontSize}px system-ui`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     // Show up to 7 chars of name
     ctx.fillText(dispName.substring(0, 7), cx, cy);

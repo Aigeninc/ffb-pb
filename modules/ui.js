@@ -14,6 +14,62 @@ import { togglePlayPause, replay, updateTimer } from './animation.js';
 let _selectPlay = null;
 export function setSelectPlayFn(fn) { _selectPlay = fn; }
 
+// ── Kid-Friendly Text (Player Mode) ──────────────────────────
+
+const LABEL_TO_KID_TEXT = {
+  'MESH':        'Run across the field. The ball is coming to you!',
+  'MESH←':       'Run hard to the LEFT across the field. Catch the ball!',
+  'MESH→':       'Run hard to the RIGHT across the field. Catch the ball!',
+  'FLAT':        'Run to the sideline. Be ready — QB might throw to you!',
+  'FLAT!':       'Run to the sideline. The ball IS coming to you!',
+  'FLAT (safe)': 'Run to the sideline. You are the safe throw.',
+  'GO!':         'Sprint as fast as you can straight downfield!',
+  'GO DEEP!':    'Sprint as fast as you can straight downfield!',
+  'CORNER':      'Run upfield, then break toward the corner.',
+  'OUT':         'Run straight, then cut hard to the sideline.',
+  'SLANT':       'Run 3 steps, then cut inside. Quick catch!',
+  'CROSS!':      'Run across the middle of the field.',
+  'DIG':         'Run upfield, then cut hard across the middle.',
+  'HITCH':       'Run 5 yards, STOP, turn around. Ball coming!',
+  'POST!':       'Run upfield, then angle toward the middle.',
+  'DEEP POST!':  'Sprint deep, then cut to the middle. BIG PLAY!',
+  'CHECK':       'Snap the ball, then run your route.',
+  'CLEAR':       'Run your route to pull defenders away. You are a decoy!',
+  'FAKE+PITCH':  'Take the fake handoff, then pitch it back to QB!',
+  '1-ON-1!':     'You are alone against one defender. Beat them!',
+  'WHEEL':       'Start toward the sideline, then turn upfield and GO!',
+  'SWEEP':       'Take the handoff and sprint to the outside!',
+  'DRAW':        'Wait for the fake, then burst through the middle!',
+  'JET':         'Motion across, take the handoff at full speed!',
+  'COUNTER':     'Fake one way, then take the handoff going the other!',
+  'BLOCK HERE':  'Get in position and block your defender.',
+  'SCREEN':      'Catch the quick pass and follow your blockers!',
+};
+
+function getPlayerInstruction(play, playerName) {
+  const pd = play.players[playerName];
+  if (!pd) return "Watch the play and learn everyone's job!";
+
+  // QB special case
+  if (playerName === 'Braelyn') {
+    if (play.qbLook) return play.qbLook.tip || play.qbLook.throw || "You are the QB. Deliver the ball!";
+    return "You are the QB. Deliver the ball!";
+  }
+
+  // Center special case
+  if (playerName === 'Lenox') {
+    if (pd.label === 'CHECK') return "Snap the ball to the QB, then run your check-down route.";
+    return "Snap the ball to the QB, then run your route.";
+  }
+
+  const text = LABEL_TO_KID_TEXT[pd.label];
+  if (text) return text;
+
+  if (pd.read === 0) return "Run your route to help the play work!";
+  if (pd.read === 1) return "You are the first read — the ball is probably coming to you!";
+  return "Run your route — the QB might throw to you!";
+}
+
 // ── Play Set Definitions ──────────────────────────────────────
 
 const PLAY_SETS = [
@@ -448,6 +504,18 @@ export function buildControls() {
 export function updateInfoPanel() {
   const play = PLAYS[state.currentPlayIdx];
 
+  // Player mode: show kid-friendly instruction
+  if (state.appMode === 'player' && state.playerModeName) {
+    const instruction = getPlayerInstruction(play, state.playerModeName);
+    const formEl = document.getElementById('formation-label');
+    const wtuEl = document.getElementById('when-to-use');
+    const notesEl = document.getElementById('play-notes');
+    if (formEl) formEl.textContent = play.name;
+    if (wtuEl) wtuEl.innerHTML = `<span style="font-size:18px;font-weight:bold;color:#22c55e;">🏈 YOUR JOB</span>`;
+    if (notesEl) notesEl.innerHTML = `<span style="font-size:15px;color:#e0e0e0;line-height:1.4;">${instruction}</span>`;
+    return;
+  }
+
   // formation-label: always show play name + formation (dimmed, compact)
   document.getElementById('formation-label').textContent = play.name + ' · ' + play.formation;
 
@@ -473,4 +541,44 @@ export function updateInfoPanel() {
     document.getElementById('play-notes').innerHTML =
       `<span class="info-tag target-tag">TARGET</span><span class="info-text-main">${play.target || ''}</span>`;
   }
+}
+
+// ── Player Picker Overlay ─────────────────────────────────────
+
+export function showPlayerPicker() {
+  const overlay = document.getElementById('player-picker');
+  const grid = document.getElementById('player-picker-grid');
+  if (!overlay || !grid) return;
+
+  grid.innerHTML = '';
+
+  // Show all non-sub players (the main roster)
+  const mainPlayers = ['Braelyn', 'Lenox', 'Greyson', 'Marshall', 'Cooper', 'Jordy', 'Zeke', 'Mason'];
+
+  mainPlayers.forEach(name => {
+    const playerData = PLAYERS[name];
+    if (!playerData) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'player-picker-btn';
+    btn.innerHTML = `
+      <div class="picker-dot" style="background:${playerData.color}${name === 'Braelyn' ? ';border-color:#fff' : ''}"></div>
+      <span class="picker-name">${name}</span>
+    `;
+    btn.addEventListener('click', () => {
+      state.playerModeName = name;
+      try { localStorage.setItem('playbook:playerName', name); } catch(e) {}
+      overlay.style.display = 'none';
+      buildPlaySelector();
+      // Select first play and auto-replay
+      const playerPlays = getPlayerModePlays();
+      if (playerPlays.length > 0) {
+        const idx = PLAYS.indexOf(playerPlays[0]);
+        if (_selectPlay) _selectPlay(idx);
+      }
+    });
+    grid.appendChild(btn);
+  });
+
+  overlay.style.display = '';
 }
