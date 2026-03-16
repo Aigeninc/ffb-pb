@@ -5,7 +5,7 @@ import {
   getActiveSubs, getPerPlaySubs, getDisplayName, getAvailableSubs,
   saveSunlightMode, saveSubstitutions, saveActivePlaySet,
   saveActivePlaySetTag, getPlaysForTag,
-  saveActiveFamily, getFilteredPlays, getPlayerModePlays,
+  saveActiveFamily, getFilteredPlays, getPlayerModePlays, getLineupSubs,
 } from './state.js';
 import { drawFrame } from './renderer.js';
 import { togglePlayPause, replay, updateTimer } from './animation.js';
@@ -47,7 +47,32 @@ const LABEL_TO_KID_TEXT = {
 };
 
 function getPlayerInstruction(play, playerName) {
-  const pd = play.players[playerName];
+  let pd = play.players[playerName];
+
+  // If player isn't directly in the play, check if they're subbed in
+  if (!pd) {
+    const playIdx = PLAYS.indexOf(play);
+    const subs = state.substitutions[playIdx] || {};
+    const lineupSubs = getLineupSubs();
+
+    // Check per-play subs first
+    for (const [origName, subName] of Object.entries(subs)) {
+      if (subName === playerName) {
+        pd = play.players[origName];
+        break;
+      }
+    }
+    // Check lineup subs if no per-play sub found
+    if (!pd) {
+      for (const [origName, subName] of Object.entries(lineupSubs)) {
+        if (subName === playerName && play.players[origName]) {
+          pd = play.players[origName];
+          break;
+        }
+      }
+    }
+  }
+
   if (!pd) return "Watch the play and learn everyone's job!";
 
   // QB special case

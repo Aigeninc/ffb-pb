@@ -134,35 +134,21 @@ Spread, Twins Right/Left, Trips Right/Left, Bunch Right/Left, Stack, Empty, RB O
 
 ## Known UX Issues (2026-03-16)
 
-### P0: Speed Control
-- 0.25x is the ONLY usable speed for teaching kids plays
-- Should be the default speed on app load
-- Rename speed labels to teaching-oriented language: `Teach | Walk | Run | Full Speed`
-- Current `0.25x | 0.5x | 1x | 2x` means nothing to a parent coach
+### ✅ DONE: Speed Control (Wave 5)
+- Speed labels renamed to `Teach | Walk | Run | Full Speed`
+- Default speed is Teach (0.25x) on app load
 
-### P0: Control Overload
-- 12 modules, growing control surface — too many icons, similar styling
-- Only Keith (the builder) can navigate it; fails the "hand to another coach" test
-- Need clear separation between:
-  - **GAME MODE** (sideline during a game): play selector, family filter, animation, speed — NOTHING ELSE
-  - **PREP MODE** (at home before practice): editor, roster, wristband, queue, game day setup
-- First-time user should see 3-4 controls max, not a cockpit
-- Icons need to be visually distinct — current set uses similar shapes/sizes
+### ✅ DONE: Control Overload (Waves 3-4)
+- Three-mode architecture separates concerns:
+  - **Player Mode** — zero coach controls, kid-friendly
+  - **Coach Mode** — sideline essentials only
+  - **Prep Mode** — full toolbox
 
-### P0: Player Mode (Kid-Friendly View)
-- End goal: send a clean version to 8-10 year old players so THEY can learn plays
-- Player opens app → picks their name/avatar → sees ONLY plays they're in
-- Each play shows: FULL play animation with their route highlighted/bold + simple text instruction ("Run right, cut across left")
-- Other players' routes still visible (not dimmed) so kids understand the whole play and WHY they go where they go
-- Their player dot/name is larger/glowing so they can track themselves in the full picture
-- Coach controls which plays/families each player sees — curated assignment, not full playbook
-- Share link like `?mode=player&name=Greyson&family=mesh,counter-jet` — kid only sees assigned families
-- Coach can also assign specific plays: `?plays=Mesh+Left,Counter,Jet+Sweep`
-- ZERO coaching controls visible — no editor, no roster, no game day, no queue
-- Animation at teaching speed only (0.25x), auto-plays
-- Big friendly buttons, minimal text, maybe position-specific labels ("YOUR JOB: catch the ball here")
-- The player filter (tap color to isolate) is the seed — wrap it in a kid-friendly shell
-- This is the version that gets shared with the team
+### ✅ DONE: Player Mode (Waves 4-5 + Sub-Aware)
+- Player picks name → sees only their plays
+- Routes highlighted/bold, pulsing glow, kid-friendly instructions
+- Sub-aware: Jordy/Zeke see plays they're subbed into
+- Share link: `?mode=player&name=Greyson`
 
 ### P1: Three-Mode Architecture
 - **Player Mode** — kid-friendly, pick your name, see your routes (DEFAULT when shared)
@@ -197,6 +183,19 @@ The app supports three modes, controlled via URL parameter `?mode=`:
 - **Features:** Player picker overlay, filtered play list, kid-friendly instructions ("🏈 YOUR JOB"), pulsing glow on active player, auto-play, prev/next nav buttons
 - **Controls shown:** Replay, Play/Pause only
 - **Speed:** Locked to Teach (0.25x)
+
+#### Sub-Aware Player Mode
+Player mode is substitution-aware. When a coach subs Jordy in for Cooper on specific plays (via Prep mode roster panel), `?mode=player&name=Jordy` will:
+- Show only the plays Jordy is subbed into
+- Highlight Jordy's dot with the pulsing glow effect
+- Show Jordy's route (inherited from the player they replaced) with thicker line
+- Display kid-friendly instructions for Jordy's assigned role in each play
+
+This means the coach workflow is:
+1. In Prep mode, sub Jordy in for Cooper on 2-3 plays
+2. Tap 📤 next to Jordy's name in the roster panel
+3. Send the link to Jordy's parents
+4. Jordy opens the link and sees exactly his plays with his routes highlighted
 
 ### Coach Mode (`?mode=coach` or default)
 - **Audience:** Coach on sideline

@@ -365,9 +365,27 @@ export function parseURLParams() {
 export function getPlayerModePlays() {
   let pool = PLAYS;
 
-  // Filter to plays this player appears in
+  // Filter to plays this player appears in (including sub appearances)
   if (state.playerModeName) {
-    pool = pool.filter(p => Object.keys(p.players).some(name => name === state.playerModeName));
+    pool = pool.filter((p, idx) => {
+      // Direct: player is in the play's roster
+      if (Object.keys(p.players).some(name => name === state.playerModeName)) return true;
+
+      // Per-play sub: player is subbed into this play
+      const subs = state.substitutions[idx] || {};
+      if (Object.values(subs).some(subName => subName === state.playerModeName)) return true;
+
+      // Lineup subs: check if player is a lineup sub for someone in this play
+      const lineupSubs = getLineupSubs();
+      for (const origName of Object.keys(p.players)) {
+        if (lineupSubs[origName] === state.playerModeName) {
+          // Only if no per-play sub overrides this slot
+          if (!subs[origName]) return true;
+        }
+      }
+
+      return false;
+    });
   }
 
   // Filter by families if specified

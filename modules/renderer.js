@@ -524,7 +524,8 @@ function drawRoutes(play) {
       }
     }
 
-    const isActivePlayerRoute = state.appMode === 'player' && state.playerModeName && name === state.playerModeName;
+    const isActivePlayerRoute = state.appMode === 'player' && state.playerModeName &&
+      (name === state.playerModeName || getDisplayName(name) === state.playerModeName);
     ctx.strokeStyle = color;
     ctx.lineWidth = pd.dashed ? (state.sunlightMode ? 4 : 3) : (state.sunlightMode ? 7 : 4.5);
     if (isActivePlayerRoute) ctx.lineWidth += 2;
@@ -575,7 +576,8 @@ function drawPlayers(play) {
     const dispName = getPlayerDisplayName(name);
 
     // Player mode: pulsing glow ring for the active player
-    const isActivePlayer = state.appMode === 'player' && state.playerModeName && name === state.playerModeName;
+    const isActivePlayer = state.appMode === 'player' && state.playerModeName &&
+      (name === state.playerModeName || getDisplayName(name) === state.playerModeName);
     if (isActivePlayer) {
       const pulse = 0.4 + 0.3 * Math.sin((state.animTime || 0) * 4);
       ctx.save();
