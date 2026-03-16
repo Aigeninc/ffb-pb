@@ -1930,3 +1930,32 @@ body[data-mode="player"] .mode-switch-btn.revealed { display: block; }
   transition: opacity 0.2s;
 }
 .share-link-btn:hover { opacity: 1; }
+
+/* ── Empty State ──────────────────────────────────────────── */
+.empty-state {
+  color: var(--text-dim);
+  font-size: 12px;
+  text-align: center;
+  padding: 16px;
+  width: 100%;
+  font-style: italic;
+}
+
+/* ── Sunlight Mode: New Elements (Waves 2-4) ─────────────── */
+body.sunlight .player-picker-overlay { background: rgba(255, 255, 255, 0.95); }
+body.sunlight .player-picker-title { color: #000; }
+body.sunlight .picker-name { color: #000; }
+body.sunlight .picker-dot { border-color: rgba(0,0,0,0.3); }
+
+body.sunlight .mode-overlay { background: rgba(255, 255, 255, 0.95); }
+body.sunlight .mode-overlay-title { color: #000; }
+body.sunlight .mode-option { background: #f0f0f0; border-color: #ccc; }
+body.sunlight .mode-option-label { color: #000; }
+body.sunlight .mode-option-desc { color: #666; }
+body.sunlight .mode-overlay-close { color: #666; border-color: #ccc; }
+
+body.sunlight .player-nav-btn { background: #e0e0e0; color: #000; border-color: #999; }
+
+body.sunlight .gd-section-header { color: #333; }
+
+body.sunlight .empty-state { color: #666; }

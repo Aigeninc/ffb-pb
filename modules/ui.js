@@ -304,6 +304,17 @@ export function buildPlaySelector() {
     });
   }
 
+  if (playRow.children.length === 0) {
+    const emptyMsg = document.createElement('div');
+    emptyMsg.className = 'empty-state';
+    if (isPlayer && state.playerModeName) {
+      emptyMsg.textContent = `No plays found for ${state.playerModeName}. Try removing the family filter.`;
+    } else {
+      emptyMsg.textContent = 'No plays match this filter combination. Try changing the set or family filter.';
+    }
+    playRow.appendChild(emptyMsg);
+  }
+
   container.appendChild(playRow);
 }
 

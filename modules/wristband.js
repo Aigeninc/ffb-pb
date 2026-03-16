@@ -1,4 +1,5 @@
 // modules/wristband.js — Wristband play sheet generator
+import { getFilteredPlays } from './state.js';
 
 // Generate a printable wristband-sized play sheet
 export function generateWristband() {
@@ -18,8 +19,12 @@ export function generateWristband() {
 }
 
 function selectWristbandPlays() {
-  // Pick 8 plays that represent a diverse playbook
-  const priorityPlays = [
+  // Use the active play set (respects tag + family filters), fall back to all plays
+  const activePlays = getFilteredPlays();
+  const pool = activePlays.length > 0 ? activePlays : PLAYS;
+
+  // Prefer a curated order if plays are in the pool
+  const priorityNames = [
     'Mesh',
     'Flood Right',
     'Quick Slants NRZ',
@@ -31,20 +36,21 @@ function selectWristbandPlays() {
   ];
 
   const plays = [];
-  for (const name of priorityPlays) {
-    const idx = PLAYS.findIndex(p => p.name === name);
-    if (idx !== -1) {
-      plays.push({ name, play: PLAYS[idx] });
+  for (const name of priorityNames) {
+    const play = pool.find(p => p.name === name);
+    if (play) {
+      plays.push({ name, play });
     }
     if (plays.length >= 8) break;
   }
 
-  // If we didn't find 8, fill from available plays
+  // Fill remaining slots from the active pool
   if (plays.length < 8) {
-    for (let i = 0; i < PLAYS.length && plays.length < 8; i++) {
-      if (!plays.find(p => p.name === PLAYS[i].name)) {
-        plays.push({ name: PLAYS[i].name, play: PLAYS[i] });
+    for (const play of pool) {
+      if (!plays.find(p => p.name === play.name)) {
+        plays.push({ name: play.name, play });
       }
+      if (plays.length >= 8) break;
     }
   }
 

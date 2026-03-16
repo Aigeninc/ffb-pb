@@ -391,6 +391,9 @@ export function loadPreferences() {
     }
     const savedSpeed = localStorage.getItem('playbook:speed');
     if (savedSpeed) state.speed = parseFloat(savedSpeed);
+    // Load saved player name (for player mode persistence)
+    const savedPlayerName = localStorage.getItem('playbook:playerName');
+    if (savedPlayerName) state._savedPlayerName = savedPlayerName;
   } catch (e) {}
 }
 

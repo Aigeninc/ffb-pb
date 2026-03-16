@@ -186,3 +186,34 @@ git add -A && git commit -m "description" && git push
 ```
 
 Live at: https://aigeninc.github.io/ffb-pb/
+
+## Three-Mode System (Wave 2-4)
+
+The app supports three modes, controlled via URL parameter `?mode=`:
+
+### Player Mode (`?mode=player`)
+- **Audience:** Kids (8-10 year olds)
+- **URL params:** `name=Greyson`, `family=mesh`, `plays=Mesh,Flood Right`, `speed=teach`, `sun=1`
+- **Features:** Player picker overlay, filtered play list, kid-friendly instructions ("🏈 YOUR JOB"), pulsing glow on active player, auto-play, prev/next nav buttons
+- **Controls shown:** Replay, Play/Pause only
+- **Speed:** Locked to Teach (0.25x)
+
+### Coach Mode (`?mode=coach` or default)
+- **Audience:** Coach on sideline
+- **Features:** Family filter navigation, auto-play on selection, Game Day panel with merged situation engine
+- **Controls shown:** Replay, Play/Pause, Sunlight, Game Day, Speed buttons
+
+### Prep Mode (`?mode=prep`)
+- **Audience:** Coach during practice/planning
+- **Features:** Full toolbox — all controls, play editor, queue system, roster management, wristband generator
+- **Controls shown:** Everything
+
+### Mode Switcher
+- ⚙️ gear icon (top-right) in Coach/Prep modes
+- Hidden in Player mode — reveal via triple-tap on field canvas
+- Navigates via URL change (full page reload to reinitialize)
+
+### Share Links
+- In Roster panel (Prep mode), each player has a 📤 button
+- Copies personalized player mode URL to clipboard
+- Example: `https://site.com/?mode=player&name=Greyson`
