@@ -80,30 +80,11 @@ function selectPlay(idx) {
 // ── Coach & Queue panel accordion (mutually exclusive) ────────
 
 function setupPanelToggles() {
-  const coachBtn = document.getElementById('btn-coach');
   const queueBtn = document.getElementById('btn-queue');
-  const coachPanel = document.getElementById('coach-panel');
   const queueBar = document.getElementById('queue-bar');
-
-  coachBtn.addEventListener('click', () => {
-    state.coachMode = !state.coachMode;
-    if (state.coachMode && state.queueMode) {
-      state.queueMode = false;
-      queueBtn.style.opacity = '0.4';
-      queueBar.style.display = 'none';
-    }
-    coachBtn.style.opacity = state.coachMode ? '1' : '0.4';
-    coachPanel.style.display = state.coachMode ? 'block' : 'none';
-    if (state.coachMode) setupCoachPanel();
-  });
 
   queueBtn.addEventListener('click', () => {
     state.queueMode = !state.queueMode;
-    if (state.queueMode && state.coachMode) {
-      state.coachMode = false;
-      coachBtn.style.opacity = '0.4';
-      coachPanel.style.display = 'none';
-    }
     queueBtn.style.opacity = state.queueMode ? '1' : '0.4';
     renderQueue();
     buildPlaySelector();
@@ -134,6 +115,17 @@ function setupGamedayButton() {
     } else {
       openGamedayPanel();
       gamedayBtn.style.opacity = '1';
+      setupCoachPanel();
+      // Wire up situation section collapsible
+      const sitToggle = document.getElementById('gd-sit-toggle');
+      const sitBody = document.getElementById('gd-sit-body');
+      if (sitToggle && sitBody && !sitToggle._wired) {
+        sitToggle._wired = true;
+        sitToggle.addEventListener('click', () => {
+          sitBody.classList.toggle('collapsed');
+          sitToggle.classList.toggle('collapsed');
+        });
+      }
     }
   });
 }
@@ -260,6 +252,55 @@ function init() {
     setTimeout(() => replay(), 500);
   }
 }
+
+// Mode switcher
+  const modeSwitchBtn = document.getElementById('btn-mode-switch');
+  const modeOverlay = document.getElementById('mode-overlay');
+  const modeClose = document.getElementById('mode-overlay-close');
+
+  if (modeSwitchBtn) {
+    modeSwitchBtn.addEventListener('click', () => {
+      modeOverlay.style.display = '';
+    });
+  }
+
+  if (modeClose) {
+    modeClose.addEventListener('click', () => {
+      modeOverlay.style.display = 'none';
+    });
+  }
+
+  document.querySelectorAll('.mode-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.modeTarget;
+      const url = new URL(window.location);
+      url.searchParams.set('mode', target);
+      if (target !== 'player') url.searchParams.delete('name');
+      window.location.href = url.toString();
+    });
+  });
+
+  // Triple-tap on canvas to reveal mode switcher in player mode
+  if (state.appMode === 'player') {
+    let tapCount = 0;
+    let tapTimer = null;
+    const canvas = document.getElementById('field-canvas');
+    if (canvas) {
+      canvas.addEventListener('click', () => {
+        tapCount++;
+        clearTimeout(tapTimer);
+        tapTimer = setTimeout(() => { tapCount = 0; }, 800);
+        if (tapCount >= 3) {
+          tapCount = 0;
+          const switchBtn = document.getElementById('btn-mode-switch');
+          if (switchBtn) {
+            switchBtn.classList.add('revealed');
+            setTimeout(() => switchBtn.classList.remove('revealed'), 5000);
+          }
+        }
+      });
+    }
+  }
 
 // Modules are always deferred; DOM is ready by the time this runs
 if (document.readyState === 'loading') {

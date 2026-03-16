@@ -1,6 +1,6 @@
 // Service Worker for offline support
 // Update CACHE_VERSION when assets change to bust old caches
-const CACHE_VERSION = '20260316-wave3-player-polish';
+const CACHE_VERSION = '20260316-wave4-coach-merge';
 const CACHE_NAME = 'playbook-' + CACHE_VERSION;
 
 const ASSETS = [

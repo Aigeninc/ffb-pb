@@ -207,12 +207,33 @@ function renderRoutesPlayerSelect() {
   select.innerHTML = '';
 
   state.roster.forEach(player => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:4px;';
+
     const btn = document.createElement('button');
     btn.className = 'routes-player-btn';
-    btn.style.cssText = `border-color:${player.color};background:rgba(0,0,0,0.3)`;
+    btn.style.cssText = `border-color:${player.color};background:rgba(0,0,0,0.3);flex:1`;
     btn.innerHTML = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${player.color};margin-right:4px"></span>${player.name}`;
     btn.addEventListener('click', () => openMyRoutes(player.name));
-    select.appendChild(btn);
+
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'share-link-btn';
+    shareBtn.textContent = '📤';
+    shareBtn.title = `Copy ${player.name}'s player link`;
+    shareBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const url = new URL(window.location.origin + window.location.pathname);
+      url.searchParams.set('mode', 'player');
+      url.searchParams.set('name', player.name);
+      navigator.clipboard.writeText(url.toString()).then(() => {
+        shareBtn.textContent = '✅';
+        setTimeout(() => { shareBtn.textContent = '📤'; }, 1500);
+      });
+    });
+
+    row.appendChild(btn);
+    row.appendChild(shareBtn);
+    select.appendChild(row);
   });
 }
 

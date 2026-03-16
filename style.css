@@ -1835,3 +1835,98 @@ body[data-mode="coach"] .play-selector-sep:first-of-type { display: none; }
   transition: transform 0.1s;
 }
 .player-nav-btn:active { transform: scale(0.95); }
+
+/* ── Collapsible Situation Section in Gameday Panel ───────── */
+.gd-situation { border-bottom: 1px solid var(--border); }
+.gd-section-header {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text-dim);
+  cursor: pointer;
+  user-select: none;
+}
+.gd-section-header::after { content: ' ▾'; }
+.gd-section-header.collapsed::after { content: ' ▸'; }
+.gd-section-body.collapsed { display: none; }
+
+/* ── Mode Switcher Button ──────────────────────────────────── */
+.mode-switch-btn {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 100;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.mode-switch-btn:hover { opacity: 1; }
+body[data-mode="player"] .mode-switch-btn { display: none; }
+body[data-mode="player"] .mode-switch-btn.revealed { display: block; }
+
+/* ── Mode Overlay ─────────────────────────────────────────── */
+.mode-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 10, 30, 0.95);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.mode-overlay-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
+.mode-overlay-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 280px;
+}
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s;
+}
+.mode-option:active { transform: scale(0.98); }
+.mode-option-icon { font-size: 28px; }
+.mode-option-label { font-size: 16px; font-weight: bold; color: #fff; display: block; }
+.mode-option-desc { font-size: 11px; color: var(--text-dim); display: block; }
+.mode-overlay-close {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 24px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ── Share Link Button (Roster Panel) ─────────────────────── */
+.share-link-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.share-link-btn:hover { opacity: 1; }
