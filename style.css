@@ -1738,3 +1738,28 @@ body.sunlight .ctrl-btn.sunlight-active { background: #f5d742; color: #000; }
   min-width: 28px;
   text-align: center;
 }
+
+/* ── Mode-specific styles ──────────────────────────────────── */
+
+/* Player mode: larger play buttons */
+body[data-mode="player"] .play-btn {
+  min-height: 48px;
+  font-size: 16px;
+  padding: 10px 16px;
+}
+
+/* Player mode: hide unnecessary UI */
+body[data-mode="player"] #player-filter { display: none; }
+body[data-mode="player"] .play-selector-sep { display: none; }
+
+/* Coach mode: larger family pills */
+body[data-mode="coach"] .family-btn {
+  min-height: 40px;
+  font-size: 13px;
+  padding: 6px 14px;
+}
+body[data-mode="coach"] .family-btn-emoji { font-size: 16px; }
+
+/* Coach mode: hide set row separator if set row is hidden */
+body[data-mode="coach"] .play-set-row { display: none; }
+body[data-mode="coach"] .play-selector-sep:first-of-type { display: none; }

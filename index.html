@@ -39,18 +39,18 @@
 
     <!-- Controls -->
     <div id="controls">
-      <button class="ctrl-btn" id="btn-replay" title="Replay">🔄</button>
-      <button class="ctrl-btn" id="btn-play" title="Play/Pause">▶</button>
-      <button class="ctrl-btn" id="btn-mode" title="Toggle QB Study / Game Speed">👁️</button>
-      <button class="ctrl-btn" id="btn-ball" title="Toggle ball animation">🏈</button>
-      <button class="ctrl-btn" id="btn-qb" title="QB Look-Off" style="opacity:0.4">👀</button>
-      <button class="ctrl-btn" id="btn-sun" title="Sunlight mode — thicker lines, larger dots" style="opacity:0.4">☀️</button>
-      <button class="ctrl-btn" id="btn-edit" title="Edit / Create plays" style="opacity:0.4">✏️</button>
-      <button class="ctrl-btn" id="btn-queue" title="Play Queue" style="opacity:0.4">📋</button>
-      <button class="ctrl-btn" id="btn-coach" title="Coach Call Sheet" style="opacity:0.4">🧠</button>
-      <button class="ctrl-btn" id="btn-gameday" title="Game Day Stats" style="opacity:0.4">📊</button>
-      <button class="ctrl-btn" id="btn-roster" title="Roster &amp; Lineup" style="opacity:0.4">👥</button>
-      <div class="speed-group">
+      <button class="ctrl-btn" id="btn-replay" data-modes="player,coach,prep" title="Replay">🔄</button>
+      <button class="ctrl-btn" id="btn-play" data-modes="player,coach,prep" title="Play/Pause">▶</button>
+      <button class="ctrl-btn" id="btn-mode" data-modes="prep" title="Toggle QB Study / Game Speed">👁️</button>
+      <button class="ctrl-btn" id="btn-ball" data-modes="prep" title="Toggle ball animation">🏈</button>
+      <button class="ctrl-btn" id="btn-qb" data-modes="prep" title="QB Look-Off" style="opacity:0.4">👀</button>
+      <button class="ctrl-btn" id="btn-sun" data-modes="coach,prep" title="Sunlight mode — thicker lines, larger dots" style="opacity:0.4">☀️</button>
+      <button class="ctrl-btn" id="btn-edit" data-modes="prep" title="Edit / Create plays" style="opacity:0.4">✏️</button>
+      <button class="ctrl-btn" id="btn-queue" data-modes="prep" title="Play Queue" style="opacity:0.4">📋</button>
+      <button class="ctrl-btn" id="btn-coach" data-modes="prep" title="Coach Call Sheet" style="opacity:0.4">🧠</button>
+      <button class="ctrl-btn" id="btn-gameday" data-modes="coach,prep" title="Game Day Stats" style="opacity:0.4">📊</button>
+      <button class="ctrl-btn" id="btn-roster" data-modes="prep" title="Roster &amp; Lineup" style="opacity:0.4">👥</button>
+      <div class="speed-group" data-modes="coach,prep">
         <button class="speed-btn active" data-speed="0.25">Teach</button>
         <button class="speed-btn" data-speed="0.5">Walk</button>
         <button class="speed-btn" data-speed="1">Run</button>

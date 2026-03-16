@@ -71,6 +71,12 @@ export const state = {
   activeTeam: '1',     // '1' or '2'
   rotationCounts: {},  // { playerName: playCount } for equal playing time
 
+  // ── App Mode ──────────────────────────────────────────────
+  appMode: 'coach',          // 'player' | 'coach' | 'prep'
+  playerModeName: null,      // string or null
+  playerModeFamilies: null,  // array of family slugs or null
+  playerModePlays: null,     // array of play names or null
+
   // ── Active Play Set Tag (predefined set selector) ─────────
   activePlaySetTag: 'core',  // 'core'|'extended'|'2back'|'nrz'|'exotic'|'all'|'custom'
 
@@ -325,6 +331,56 @@ export function loadActivePlaySet() {
       }
     }
   } catch (e) {}
+}
+
+// ── URL Parameter Parsing ─────────────────────────────────────
+
+export function parseURLParams() {
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode');
+  if (mode === 'player') state.appMode = 'player';
+  else if (mode === 'prep') state.appMode = 'prep';
+  else state.appMode = 'coach';
+
+  state.playerModeName = params.get('name') || null;
+
+  const familyParam = params.get('family');
+  state.playerModeFamilies = familyParam ? familyParam.split(',').map(f => f.trim()) : null;
+
+  const playsParam = params.get('plays');
+  state.playerModePlays = playsParam ? playsParam.split(',').map(p => p.trim()) : null;
+
+  // Speed override from URL
+  const speedMap = { teach: 0.25, walk: 0.5, run: 1, full: 2 };
+  const speedParam = params.get('speed');
+  if (speedParam && speedMap[speedParam]) state.speed = speedMap[speedParam];
+
+  // Sunlight override
+  if (params.get('sun') === '1') {
+    state.sunlightMode = true;
+    document.body.classList.add('sunlight');
+  }
+}
+
+export function getPlayerModePlays() {
+  let pool = PLAYS;
+
+  // Filter to plays this player appears in
+  if (state.playerModeName) {
+    pool = pool.filter(p => Object.keys(p.players).some(name => name === state.playerModeName));
+  }
+
+  // Filter by families if specified
+  if (state.playerModeFamilies) {
+    pool = pool.filter(p => state.playerModeFamilies.includes(p.family));
+  }
+
+  // Filter by specific play names if specified
+  if (state.playerModePlays) {
+    pool = pool.filter(p => state.playerModePlays.includes(p.name));
+  }
+
+  return pool;
 }
 
 export function loadPreferences() {

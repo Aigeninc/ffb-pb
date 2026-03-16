@@ -3,7 +3,7 @@
 
 import {
   state, getAnimStart, loadQueueState, loadPreferences, loadCustomPlays, loadSubstitutions,
-  loadActivePlaySet, loadActivePlaySetTag,
+  loadActivePlaySet, loadActivePlaySetTag, parseURLParams,
 } from './modules/state.js';
 
 import {
@@ -16,7 +16,7 @@ import {
 } from './modules/animation.js';
 
 import {
-  buildPlaySelector, buildPlayerFilter, buildControls, updateInfoPanel,
+  buildPlaySelector, buildPlayerFilter, buildControls, updateInfoPanel, applyModeVisibility,
   setSelectPlayFn as uiSetSelectPlay,
 } from './modules/ui.js';
 
@@ -70,6 +70,11 @@ function selectPlay(idx) {
 
   const btns = document.querySelectorAll('.play-btn');
   if (btns[idx]) btns[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
+  // Auto-play in coach and player modes
+  if (state.appMode === 'coach' || state.appMode === 'player') {
+    setTimeout(() => replay(), 200);
+  }
 }
 
 // ── Coach & Queue panel accordion (mutually exclusive) ────────
@@ -146,6 +151,10 @@ function setupEditButton() {
 // ── Init ──────────────────────────────────────────────────────
 
 function init() {
+  // Parse URL params FIRST — sets appMode and overrides before anything else
+  parseURLParams();
+  document.body.dataset.mode = state.appMode;
+
   // Load saved preferences before rendering
   loadPreferences();
   loadQueueState();
@@ -190,6 +199,7 @@ function init() {
   setupEditorCanvasEvents(document.getElementById('field-canvas'));
   setupEditButton();
 
+  applyModeVisibility();
   buildPlaySelector();
   buildPlayerFilter();
   buildControls();

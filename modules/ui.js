@@ -5,7 +5,7 @@ import {
   getActiveSubs, getPerPlaySubs, getDisplayName, getAvailableSubs,
   saveSunlightMode, saveSubstitutions, saveActivePlaySet,
   saveActivePlaySetTag, getPlaysForTag,
-  saveActiveFamily, getFilteredPlays,
+  saveActiveFamily, getFilteredPlays, getPlayerModePlays,
 } from './state.js';
 import { drawFrame } from './renderer.js';
 import { togglePlayPause, replay, updateTimer } from './animation.js';
@@ -51,94 +51,118 @@ const TAG_COLORS = {
   exotic:   '#8b5cf6',
 };
 
+// ── Mode Visibility ───────────────────────────────────────────
+
+export function applyModeVisibility() {
+  document.querySelectorAll('#controls [data-modes]').forEach(el => {
+    const modes = el.dataset.modes.split(',');
+    el.style.display = modes.includes(state.appMode) ? '' : 'none';
+  });
+
+  // Player mode: force teaching speed
+  if (state.appMode === 'player') {
+    state.speed = 0.25;
+  }
+}
+
 // ── Play Selector ─────────────────────────────────────────────
 
 export function buildPlaySelector() {
   const container = document.getElementById('play-selector');
   container.innerHTML = '';
 
-  // ── Row 1: Set Selector buttons (always visible) ──────────
-  const setRow = document.createElement('div');
-  setRow.className = 'play-set-row';
+  const isPlayer = state.appMode === 'player';
+  const isCoach = state.appMode === 'coach';
+  const isPrep = state.appMode === 'prep';
 
-  PLAY_SETS.forEach(({ tag, label, emoji }) => {
-    const visiblePlays = getPlaysForTag(tag);
-    const count = tag === 'custom' ? null : visiblePlays.length;
+  // ── Row 1: Set Selector buttons (prep only) ───────────────
+  if (isPrep) {
+    const setRow = document.createElement('div');
+    setRow.className = 'play-set-row';
 
-    const btn = document.createElement('button');
-    const isActive = state.activePlaySetTag === tag;
-    btn.className = 'set-btn' + (isActive ? ' active' : '');
-    btn.dataset.tag = tag;
-    btn.innerHTML =
-      `<span class="set-btn-emoji">${emoji}</span>` +
-      `<span class="set-btn-label">${label}</span>` +
-      (count !== null ? `<span class="set-btn-count">${count}</span>` : '');
+    PLAY_SETS.forEach(({ tag, label, emoji }) => {
+      const visiblePlays = getPlaysForTag(tag);
+      const count = tag === 'custom' ? null : visiblePlays.length;
 
-    btn.addEventListener('click', () => {
-      if (tag === 'custom') {
-        state.activePlaySetTag = 'custom';
-        state.activePlaySetEditing = true;
-        saveActivePlaySetTag();
-        buildPlaySelector();
-      } else {
-        state.activePlaySetTag = tag;
-        state.activePlaySetEditing = false;
-        saveActivePlaySetTag();
-        buildPlaySelector();
-      }
+      const btn = document.createElement('button');
+      const isActive = state.activePlaySetTag === tag;
+      btn.className = 'set-btn' + (isActive ? ' active' : '');
+      btn.dataset.tag = tag;
+      btn.innerHTML =
+        `<span class="set-btn-emoji">${emoji}</span>` +
+        `<span class="set-btn-label">${label}</span>` +
+        (count !== null ? `<span class="set-btn-count">${count}</span>` : '');
+
+      btn.addEventListener('click', () => {
+        if (tag === 'custom') {
+          state.activePlaySetTag = 'custom';
+          state.activePlaySetEditing = true;
+          saveActivePlaySetTag();
+          buildPlaySelector();
+        } else {
+          state.activePlaySetTag = tag;
+          state.activePlaySetEditing = false;
+          saveActivePlaySetTag();
+          buildPlaySelector();
+        }
+      });
+      setRow.appendChild(btn);
     });
-    setRow.appendChild(btn);
-  });
 
-  container.appendChild(setRow);
+    container.appendChild(setRow);
+  }
 
-  // ── Row 2: Family Filter Row ──────────────────────────────
-  const familyRow = document.createElement('div');
-  familyRow.className = 'play-family-row';
+  // ── Row 2: Family Filter Row (coach and prep only) ────────
+  if (isCoach || isPrep) {
+    const familyRow = document.createElement('div');
+    familyRow.className = 'play-family-row';
 
-  // Compute the tag-filtered plays (without family filter) for accurate counts
-  const tagFilteredForCount = state.activePlaySetTag === 'custom' && state.activePlaySet
-    ? PLAYS.filter(p => state.activePlaySet.has(p.name))
-    : getPlaysForTag(state.activePlaySetTag);
+    // Compute the tag-filtered plays (without family filter) for accurate counts
+    const tagFilteredForCount = state.activePlaySetTag === 'custom' && state.activePlaySet
+      ? PLAYS.filter(p => state.activePlaySet.has(p.name))
+      : getPlaysForTag(state.activePlaySetTag);
 
-  PLAY_FAMILIES.forEach(({ family, label, emoji }) => {
-    const count = family === 'all'
-      ? tagFilteredForCount.length
-      : tagFilteredForCount.filter(p => p.family === family).length;
+    PLAY_FAMILIES.forEach(({ family, label, emoji }) => {
+      const count = family === 'all'
+        ? tagFilteredForCount.length
+        : tagFilteredForCount.filter(p => p.family === family).length;
 
-    // Skip families with 0 plays in current tag filter (except 'all')
-    if (family !== 'all' && count === 0) return;
+      // Skip families with 0 plays in current tag filter (except 'all')
+      if (family !== 'all' && count === 0) return;
 
-    const btn = document.createElement('button');
-    const isActive = state.activeFamily === family;
-    btn.className = 'family-btn' + (isActive ? ' active' : '');
-    btn.dataset.family = family;
-    btn.innerHTML =
-      `<span class="family-btn-emoji">${emoji}</span>` +
-      `<span class="family-btn-label">${label}</span>` +
-      `<span class="family-btn-count">${count}</span>`;
+      const btn = document.createElement('button');
+      const isActive = state.activeFamily === family;
+      btn.className = 'family-btn' + (isActive ? ' active' : '');
+      btn.dataset.family = family;
+      btn.innerHTML =
+        `<span class="family-btn-emoji">${emoji}</span>` +
+        `<span class="family-btn-label">${label}</span>` +
+        `<span class="family-btn-count">${count}</span>`;
 
-    btn.addEventListener('click', () => {
-      state.activeFamily = family;
-      saveActiveFamily();
-      buildPlaySelector();
+      btn.addEventListener('click', () => {
+        state.activeFamily = family;
+        saveActiveFamily();
+        buildPlaySelector();
+      });
+      familyRow.appendChild(btn);
     });
-    familyRow.appendChild(btn);
-  });
 
-  container.appendChild(familyRow);
+    container.appendChild(familyRow);
+  }
 
   // ── Separator ─────────────────────────────────────────────
-  const sep = document.createElement('div');
-  sep.className = 'play-selector-sep';
-  container.appendChild(sep);
+  if (isCoach || isPrep) {
+    const sep = document.createElement('div');
+    sep.className = 'play-selector-sep';
+    container.appendChild(sep);
+  }
 
   // ── Row 3: Play buttons in a horizontal scrollable sub-row ──
   const playRow = document.createElement('div');
   playRow.className = 'play-btn-row';
 
-  // Custom pick mode
-  if (state.activePlaySetEditing && state.activePlaySetTag === 'custom') {
+  // Custom pick mode (prep only)
+  if (isPrep && state.activePlaySetEditing && state.activePlaySetTag === 'custom') {
     const activeSet = state.activePlaySet || new Set();
     PLAYS.forEach((play, i) => {
       const isSelected = activeSet.has(play.name);
@@ -170,32 +194,59 @@ export function buildPlaySelector() {
     return;
   }
 
-  // Normal filtered mode — respects both tag filter AND family filter
-  const visiblePlays = getFilteredPlays();
-
-  visiblePlays.forEach(play => {
-    const i = PLAYS.indexOf(play);
-    const perPlaySubs = state.substitutions[i] && Object.keys(state.substitutions[i]).length > 0;
-    const btn = document.createElement('button');
-    let cls = 'play-btn' + (i === state.currentPlayIdx ? ' active' : '');
-    if (play.isCustom) cls += ' custom';
-    btn.className = cls;
-    btn.innerHTML =
-      `<span class="play-btn-name">${play.name}${perPlaySubs ? ' ↔' : ''}${play.isCustom ? ' ★' : ''}</span>` +
-      _tagDots(play);
-
-    btn.addEventListener('click', () => {
-      if (state.editorActive) return;
-      if (state.queueMode) {
-        state.queue.push({ playIdx: i, result: null });
-        state.queuePos = state.queue.length - 1;
-        if (_selectPlay) _selectPlay(i);
-      } else {
-        if (_selectPlay) _selectPlay(i);
-      }
+  if (isPlayer) {
+    // Player mode: simplified play buttons, filtered to this player's plays
+    const playerPlays = getPlayerModePlays();
+    playerPlays.forEach(play => {
+      const i = PLAYS.indexOf(play);
+      const btn = document.createElement('button');
+      btn.className = 'play-btn player-mode-btn' + (i === state.currentPlayIdx ? ' active' : '');
+      btn.innerHTML = `<span class="play-btn-name">${play.name}</span>`;
+      btn.addEventListener('click', () => { if (_selectPlay) _selectPlay(i); });
+      playRow.appendChild(btn);
     });
-    playRow.appendChild(btn);
-  });
+  } else if (isCoach) {
+    // Coach mode: family emoji + play name, no tag dots, no sub indicators
+    const familyEmojiMap = {};
+    PLAY_FAMILIES.forEach(({ family, emoji }) => { familyEmojiMap[family] = emoji; });
+
+    const visiblePlays = getFilteredPlays();
+    visiblePlays.forEach(play => {
+      const i = PLAYS.indexOf(play);
+      const emoji = familyEmojiMap[play.family] || '';
+      const btn = document.createElement('button');
+      btn.className = 'play-btn' + (i === state.currentPlayIdx ? ' active' : '');
+      btn.innerHTML = `<span class="play-btn-name">${emoji} ${play.name}</span>`;
+      btn.addEventListener('click', () => { if (_selectPlay) _selectPlay(i); });
+      playRow.appendChild(btn);
+    });
+  } else {
+    // Prep mode: full behavior with tag dots, subs, etc.
+    const visiblePlays = getFilteredPlays();
+    visiblePlays.forEach(play => {
+      const i = PLAYS.indexOf(play);
+      const perPlaySubs = state.substitutions[i] && Object.keys(state.substitutions[i]).length > 0;
+      const btn = document.createElement('button');
+      let cls = 'play-btn' + (i === state.currentPlayIdx ? ' active' : '');
+      if (play.isCustom) cls += ' custom';
+      btn.className = cls;
+      btn.innerHTML =
+        `<span class="play-btn-name">${play.name}${perPlaySubs ? ' ↔' : ''}${play.isCustom ? ' ★' : ''}</span>` +
+        _tagDots(play);
+
+      btn.addEventListener('click', () => {
+        if (state.editorActive) return;
+        if (state.queueMode) {
+          state.queue.push({ playIdx: i, result: null });
+          state.queuePos = state.queue.length - 1;
+          if (_selectPlay) _selectPlay(i);
+        } else {
+          if (_selectPlay) _selectPlay(i);
+        }
+      });
+      playRow.appendChild(btn);
+    });
+  }
 
   container.appendChild(playRow);
 }
