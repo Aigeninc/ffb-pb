@@ -3,7 +3,7 @@
 
 import {
   state, getAnimStart, loadQueueState, loadPreferences, loadCustomPlays, loadSubstitutions,
-  loadActivePlaySet,
+  loadActivePlaySet, loadActivePlaySetTag,
 } from './modules/state.js';
 
 import {
@@ -150,8 +150,9 @@ function init() {
   loadPreferences();
   loadQueueState();
   loadCustomPlays(); // Load custom plays from localStorage into PLAYS array
-  loadSubstitutions(); // Load persisted per-play subs
-  loadActivePlaySet(); // Load game day play filter
+  loadSubstitutions();    // Load persisted per-play subs
+  loadActivePlaySet();    // Load game day play filter (custom set)
+  loadActivePlaySetTag(); // Load predefined set tag (core/extended/etc.)
 
   // Wire up selectPlay callbacks in each module
   uiSetSelectPlay(selectPlay);

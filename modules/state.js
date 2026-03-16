@@ -71,7 +71,10 @@ export const state = {
   activeTeam: '1',     // '1' or '2'
   rotationCounts: {},  // { playerName: playCount } for equal playing time
 
-  // ── Active Play Set (game day filter) ─────────────────────
+  // ── Active Play Set Tag (predefined set selector) ─────────
+  activePlaySetTag: 'core',  // 'core'|'extended'|'2back'|'nrz'|'exotic'|'all'|'custom'
+
+  // ── Active Play Set (game day filter / custom pick mode) ──
   activePlaySet: null,  // null = show all, Set of play names = show only these
   activePlaySetEditing: false, // true when pick-mode is active
 
@@ -240,6 +243,29 @@ export function loadQueueState() {
         state.queuePos = Math.min(data.queuePos || 0, Math.max(0, state.queue.length - 1));
       }
     }
+  } catch (e) {}
+}
+
+// ── Active Play Set Tag (predefined sets) ─────────────────────
+
+// Which plays are visible for a given set tag
+// 'extended' shows core + extended; all others filter by their own tag
+export function getPlaysForTag(tag) {
+  if (tag === 'all' || tag === 'custom') return PLAYS;
+  if (tag === 'extended') return PLAYS.filter(p => p.tags && (p.tags.includes('core') || p.tags.includes('extended')));
+  return PLAYS.filter(p => p.tags && p.tags.includes(tag));
+}
+
+export function saveActivePlaySetTag() {
+  try {
+    localStorage.setItem('playbook:playSetTag', state.activePlaySetTag);
+  } catch (e) {}
+}
+
+export function loadActivePlaySetTag() {
+  try {
+    const raw = localStorage.getItem('playbook:playSetTag');
+    if (raw) state.activePlaySetTag = raw;
   } catch (e) {}
 }
 
