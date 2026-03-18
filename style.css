@@ -2177,3 +2177,201 @@ body.sunlight .empty-state { color: #666; }
 body.sunlight .player-highlight-toggle { background: #e0e0e0; color: #333; border-color: #999; }
 body.sunlight .player-highlight-toggle.active { background: #c8f7d6; border-color: #22c55e; color: #065f46; }
 body.sunlight .player-position-badge { background: #fff8e1; border-color: #f59e0b; color: #92400e; }
+
+/* ── Warm-Ups & Drills Panel ─────────────────────────────────── */
+
+/* Make the warmup panel wider than the roster panel for readability */
+.warmups-panel {
+  width: 360px;
+}
+
+/* Category pills */
+.warmup-category-pills {
+  display: flex;
+  gap: 6px;
+  padding: 10px 12px 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  border-bottom: 1px solid #1e3a5f;
+  flex-shrink: 0;
+}
+.warmup-category-pills::-webkit-scrollbar { display: none; }
+
+.warmup-pill {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  min-height: 28px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.warmup-pill:active { transform: scale(0.93); }
+.warmup-pill.active {
+  background: #1a2a3a;
+  color: #60a5fa;
+  border-color: #3b82f6;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+}
+
+/* Cards container */
+.warmup-cards {
+  padding: 8px 10px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Individual card */
+.warmup-card {
+  background: linear-gradient(135deg, #0d1a2e 0%, #0f2540 100%);
+  border: 1.5px solid #1e3a5f;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.warmup-card:active { border-color: #3b82f6; }
+.warmup-card.expanded {
+  border-color: #3b82f6;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Card header row — always visible */
+.warmup-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  cursor: pointer;
+}
+
+.warmup-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.warmup-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.warmup-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: #e8e8e8;
+  margin-bottom: 2px;
+}
+
+.warmup-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.3;
+}
+
+/* Category tag badge */
+.warmup-category-tag {
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 8px;
+}
+.warmup-cat-defense {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.warmup-cat-catching {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+/* Expanded detail section */
+.warmup-card-detail {
+  display: none;
+  padding: 0 12px 14px;
+  border-top: 1px solid #1e3a5f;
+}
+.warmup-card.expanded .warmup-card-detail {
+  display: block;
+}
+
+/* Numbered instructions */
+.warmup-instructions {
+  padding-left: 18px;
+  margin: 10px 0 10px;
+}
+.warmup-instructions li {
+  font-size: 12px;
+  color: #c8d8e8;
+  line-height: 1.55;
+  margin-bottom: 6px;
+}
+.warmup-instructions li:last-child { margin-bottom: 0; }
+
+/* Reps & teaches rows */
+.warmup-reps,
+.warmup-teaches {
+  font-size: 11px;
+  color: #a0b8cc;
+  line-height: 1.45;
+  margin-top: 8px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.warmup-reps strong,
+.warmup-teaches strong {
+  color: #60a5fa;
+}
+
+/* Sunlight mode overrides */
+body.sunlight .warmup-card {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+body.sunlight .warmup-card.expanded {
+  border-color: #2563eb;
+}
+body.sunlight .warmup-name { color: #111; }
+body.sunlight .warmup-desc { color: #555; }
+body.sunlight .warmup-pill {
+  background: #e8e8e8;
+  color: #333;
+  border-color: #bbb;
+}
+body.sunlight .warmup-pill.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #3b82f6;
+}
+body.sunlight .warmup-instructions li { color: #222; }
+body.sunlight .warmup-reps,
+body.sunlight .warmup-teaches {
+  background: rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.1);
+  color: #333;
+}
+body.sunlight .warmup-reps strong,
+body.sunlight .warmup-teaches strong { color: #1d4ed8; }
+body.sunlight .warmup-cat-defense {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+body.sunlight .warmup-cat-catching {
+  background: rgba(34, 197, 94, 0.1);
+  color: #15803d;
+  border-color: rgba(34, 197, 94, 0.3);
+}

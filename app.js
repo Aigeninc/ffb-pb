@@ -51,6 +51,8 @@ import {
   setSelectPlayFn as gamedaySetSelectPlay,
 } from './modules/gameday.js';
 
+import { initWarmups } from './modules/warmups.js';
+
 
 
 // ── selectPlay — central navigation function ──────────────────
@@ -208,6 +210,7 @@ function init() {
   initRoster(); // Phase 3: initialize roster/lineup panel
   setupGamedayPanel(); // Phase 4: initialize game day call sheet
   setupGamedayButton(); // Phase 4: wire up 🎯 button
+  initWarmups(); // Warm-Ups & Drills panel
 
   window.addEventListener('resize', () => {
     resizeCanvas();
