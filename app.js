@@ -51,7 +51,7 @@ import {
   setSelectPlayFn as gamedaySetSelectPlay,
 } from './modules/gameday.js';
 
-import { initWarmups } from './modules/warmups.js';
+import { initPractice, setSelectPlayFn as practiceSetSelectPlay } from './modules/practice.js';
 
 
 
@@ -210,7 +210,8 @@ function init() {
   initRoster(); // Phase 3: initialize roster/lineup panel
   setupGamedayPanel(); // Phase 4: initialize game day call sheet
   setupGamedayButton(); // Phase 4: wire up 🎯 button
-  initWarmups(); // Warm-Ups & Drills panel
+  initPractice(); // Practice Plan Builder (replaces warmups)
+  practiceSetSelectPlay(selectPlay); // Wire play viewer integration
 
   window.addEventListener('resize', () => {
     resizeCanvas();

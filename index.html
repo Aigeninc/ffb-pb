@@ -49,7 +49,7 @@
       <button class="ctrl-btn" id="btn-queue" data-modes="prep" title="Play Queue" style="opacity:0.4">📋</button>
       <button class="ctrl-btn" id="btn-gameday" data-modes="coach,prep" title="Game Day Stats" style="opacity:0.4">📊</button>
       <button class="ctrl-btn" id="btn-roster" data-modes="prep" title="Roster &amp; Lineup" style="opacity:0.4">👥</button>
-      <button class="ctrl-btn" id="btn-warmups" data-modes="coach,prep" title="Warm-Ups &amp; Drills" style="opacity:0.4">🏃</button>
+      <button class="ctrl-btn" id="btn-practice" data-modes="coach,prep" title="Practice Planner" style="opacity:0.4">🏃</button>
       <div class="speed-group" data-modes="coach,prep">
         <button class="speed-btn active" data-speed="0.25">Teach</button>
         <button class="speed-btn" data-speed="0.5">Walk</button>
@@ -227,17 +227,17 @@
     </div><!-- /.panel-body -->
   </div><!-- /#roster-panel -->
 
-  <!-- Warmups Panel Backdrop -->
-  <div id="warmups-backdrop" class="panel-backdrop"></div>
+  <!-- Practice Plan Panel Backdrop -->
+  <div id="practice-backdrop" class="panel-backdrop"></div>
 
-  <!-- Warmups Panel -->
-  <div id="warmups-panel" class="side-panel warmups-panel">
+  <!-- Practice Plan Panel -->
+  <div id="practice-panel" class="side-panel practice-panel">
     <div class="panel-header">
-      <span class="panel-title">🏃 Warm-Ups &amp; Drills</span>
-      <button class="panel-close-btn" id="warmups-close-btn" aria-label="Close">✕</button>
+      <span class="panel-title" id="practice-panel-title">🏃 Practice Planner</span>
+      <button class="panel-close-btn" id="practice-close-btn" aria-label="Close">✕</button>
     </div>
-    <div class="panel-body" id="warmups-body">
-      <!-- Rendered by warmups.js -->
+    <div class="panel-body" id="practice-body">
+      <!-- Rendered by practice.js -->
     </div>
   </div>
 

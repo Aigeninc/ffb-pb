@@ -95,6 +95,16 @@ export const state = {
   activePlaySet: null,  // null = show all, Set of play names = show only these
   activePlaySetEditing: false, // true when pick-mode is active
 
+  // ── Practice Planner ──────────────────────────────────────────
+  practicePlans: [],           // Array of saved PRACTICE_PLAN objects
+  activePracticePlan: null,    // Currently loaded plan (PRACTICE_PLAN object or null)
+  practiceRunning: false,      // True when in "run" mode during practice
+  practiceBlockIdx: 0,         // Current block index during run
+  practiceTimerActive: false,  // Timer/stopwatch ticking
+  practiceTimerRemaining: 0,   // Seconds remaining for current block (timer mode)
+  practiceTimerElapsed: 0,     // Seconds elapsed (stopwatch mode)
+  practiceTimerMode: 'timer',  // 'timer' (countdown) | 'stopwatch' (count-up)
+
   // ── Editor state ─────────────────────────────────────────
   editorActive: false,
   editorPlay: null,          // deep copy of play being edited
@@ -518,5 +528,70 @@ export function loadPlayerHighlight() {
   try {
     const raw = localStorage.getItem('playbook:playerHighlight');
     if (raw !== null) state.playerHighlightEnabled = raw !== '0';
+  } catch (e) {}
+}
+
+// ── Practice Planner Persistence ─────────────────────────────
+
+export function savePracticePlans() {
+  try {
+    localStorage.setItem('playbook:practicePlans', JSON.stringify(state.practicePlans));
+  } catch (e) {}
+}
+
+export function loadPracticePlans() {
+  try {
+    const raw = localStorage.getItem('playbook:practicePlans');
+    if (raw) {
+      const plans = JSON.parse(raw);
+      if (Array.isArray(plans)) state.practicePlans = plans;
+    }
+  } catch (e) {}
+}
+
+export function saveCustomDrillsToStorage(customDrills) {
+  try {
+    localStorage.setItem('playbook:customDrills', JSON.stringify(customDrills));
+  } catch (e) {}
+}
+
+export function loadCustomDrillsFromStorage() {
+  try {
+    const raw = localStorage.getItem('playbook:customDrills');
+    if (raw) {
+      const drills = JSON.parse(raw);
+      if (Array.isArray(drills)) return drills;
+    }
+  } catch (e) {}
+  return [];
+}
+
+export function saveLastPracticePlan(planId) {
+  try {
+    if (planId) {
+      localStorage.setItem('playbook:lastPracticePlan', planId);
+    } else {
+      localStorage.removeItem('playbook:lastPracticePlan');
+    }
+  } catch (e) {}
+}
+
+export function loadLastPracticePlan() {
+  try {
+    return localStorage.getItem('playbook:lastPracticePlan') || null;
+  } catch (e) {}
+  return null;
+}
+
+export function savePracticeTimerMode() {
+  try {
+    localStorage.setItem('playbook:practiceTimerMode', state.practiceTimerMode);
+  } catch (e) {}
+}
+
+export function loadPracticeTimerMode() {
+  try {
+    const raw = localStorage.getItem('playbook:practiceTimerMode');
+    if (raw === 'timer' || raw === 'stopwatch') state.practiceTimerMode = raw;
   } catch (e) {}
 }

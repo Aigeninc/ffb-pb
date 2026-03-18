@@ -1,0 +1,882 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "targetAge": "8-10",
+    "sport": "5v5 flag football",
+    "coordinateSystem": {
+      "description": "Y-axis = forward (direction of travel), X-axis = lateral (positive = player's right, negative = player's left). Units are in inches. Origin (0,0) is where the move sequence begins.",
+      "yAxis": "forward",
+      "xAxis": "lateral",
+      "units": "inches",
+      "strideRange": "18-24 inches for youth players"
+    },
+    "angleConventions": {
+      "footAngle": "0 = toe pointing straight ahead, positive = toe rotated clockwise (right), negative = counter-clockwise (left)",
+      "bodyAngle": "0 = facing forward, positive = rotated clockwise, negative = counter-clockwise",
+      "forceVectorAngle": "0 = force directed forward, 90 = force directed right, 180 = force directed backward, 270 = force directed left. This is the direction force is APPLIED TO THE GROUND (reaction force moves the player opposite)."
+    }
+  },
+  "moves": [
+    {
+      "id": "cut-juke",
+      "name": "Cut / Juke",
+      "description": "Head and shoulder fake one direction, plant outside foot hard, and cut sharply the opposite way. The classic evasion move.",
+      "totalSteps": 6,
+      "approachDirection": "forward",
+      "exitDirection": "45-degrees-right",
+      "phases": [
+        {
+          "phase": "approach",
+          "description": "Running forward at 3/4 speed, setting up the fake",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "foot": "right",
+              "position": { "x": 4, "y": 0 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.18,
+              "teachDuration": 0.6,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "normal running form",
+              "forceVector": { "angle": 180, "magnitude": 0.7 }
+            },
+            {
+              "stepNumber": 2,
+              "foot": "left",
+              "position": { "x": -4, "y": 20 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.18,
+              "teachDuration": 0.6,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "normal running form",
+              "forceVector": { "angle": 180, "magnitude": 0.7 }
+            }
+          ]
+        },
+        {
+          "phase": "fake",
+          "description": "Sell the fake LEFT — eyes, head, and shoulders lean left to shift defender's weight",
+          "steps": [
+            {
+              "stepNumber": 3,
+              "foot": "right",
+              "position": { "x": -2, "y": 38 },
+              "angle": -15,
+              "action": "stride",
+              "weight": 0.6,
+              "emphasis": false,
+              "duration": 0.15,
+              "teachDuration": 0.8,
+              "bodyAngle": -20,
+              "shoulderFake": "left",
+              "headDirection": "left",
+              "hipRotation": -10,
+              "armPosition": "left arm reaches slightly left to sell fake",
+              "forceVector": { "angle": 200, "magnitude": 0.5 }
+            }
+          ]
+        },
+        {
+          "phase": "plant",
+          "description": "Plant the LEFT foot hard — this is the power step. Foot angled 45° outward to generate lateral push-off force.",
+          "steps": [
+            {
+              "stepNumber": 4,
+              "foot": "left",
+              "position": { "x": -10, "y": 48 },
+              "angle": -45,
+              "action": "plant",
+              "weight": 0.9,
+              "emphasis": true,
+              "duration": 0.12,
+              "teachDuration": 1.0,
+              "bodyAngle": -15,
+              "shoulderFake": null,
+              "headDirection": "right",
+              "hipRotation": 0,
+              "armPosition": "arms pump to right side to initiate direction change",
+              "forceVector": { "angle": 250, "magnitude": 1.0 }
+            }
+          ]
+        },
+        {
+          "phase": "cut",
+          "description": "Explode RIGHT off the plant foot — sharp lateral cut at ~45 degrees",
+          "steps": [
+            {
+              "stepNumber": 5,
+              "foot": "right",
+              "position": { "x": 6, "y": 58 },
+              "angle": 30,
+              "action": "push-off",
+              "weight": 0.8,
+              "emphasis": true,
+              "duration": 0.12,
+              "teachDuration": 0.7,
+              "bodyAngle": 30,
+              "shoulderFake": null,
+              "headDirection": "forward-right",
+              "hipRotation": 25,
+              "armPosition": "driving arms forward-right",
+              "forceVector": { "angle": 225, "magnitude": 0.9 }
+            }
+          ]
+        },
+        {
+          "phase": "acceleration",
+          "description": "Burst forward at new angle — full speed acceleration away from defender",
+          "steps": [
+            {
+              "stepNumber": 6,
+              "foot": "left",
+              "position": { "x": 18, "y": 74 },
+              "angle": 25,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.15,
+              "teachDuration": 0.5,
+              "bodyAngle": 35,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 30,
+              "armPosition": "sprinting form, driving forward",
+              "forceVector": { "angle": 210, "magnitude": 0.8 }
+            }
+          ]
+        }
+      ],
+      "coachingCues": [
+        "Sell with your eyes — look LEFT where you're faking",
+        "Plant foot at 45° angle, toes pointing away from cut direction",
+        "Stay LOW through the cut — don't stand up",
+        "Snap your head RIGHT when you plant — your body follows your eyes",
+        "Explode out — fastest steps come AFTER the cut"
+      ],
+      "commonMistakes": [
+        "Rounding the cut instead of sharp plant-and-push (makes it too slow)",
+        "Slowing down before the fake (telegraphs the move to defender)",
+        "Standing up tall during the cut (lose balance and power)",
+        "Not selling the fake — just stepping without head/shoulder movement",
+        "Planting with toes forward instead of angled (reduces push-off power)"
+      ]
+    },
+    {
+      "id": "drop",
+      "name": "Drop",
+      "description": "Dead leg / shoulder dip — a subtle half-move that shifts the defender's weight without a full juke. The 'dead leg' side goes soft while the body dips, then you accelerate past.",
+      "totalSteps": 5,
+      "approachDirection": "forward",
+      "exitDirection": "30-degrees-left",
+      "phases": [
+        {
+          "phase": "approach",
+          "description": "Running forward, reading the defender",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "foot": "right",
+              "position": { "x": 4, "y": 0 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.18,
+              "teachDuration": 0.6,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "normal running form",
+              "forceVector": { "angle": 180, "magnitude": 0.7 }
+            },
+            {
+              "stepNumber": 2,
+              "foot": "left",
+              "position": { "x": -4, "y": 20 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.18,
+              "teachDuration": 0.6,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "normal running form",
+              "forceVector": { "angle": 180, "magnitude": 0.7 }
+            }
+          ]
+        },
+        {
+          "phase": "drop",
+          "description": "Right leg goes 'dead' — soft step that barely touches down. Right shoulder dips. Defender reads this as a move RIGHT and shifts their weight.",
+          "steps": [
+            {
+              "stepNumber": 3,
+              "foot": "right",
+              "position": { "x": 8, "y": 34 },
+              "angle": 10,
+              "action": "drag",
+              "weight": 0.2,
+              "emphasis": true,
+              "duration": 0.2,
+              "teachDuration": 1.0,
+              "bodyAngle": 15,
+              "shoulderFake": "right",
+              "headDirection": "right",
+              "hipRotation": 10,
+              "armPosition": "right shoulder dips down, left arm slightly out for balance",
+              "forceVector": { "angle": 160, "magnitude": 0.3 }
+            }
+          ]
+        },
+        {
+          "phase": "redirect",
+          "description": "As defender shifts right, plant the left foot and redirect LEFT past them",
+          "steps": [
+            {
+              "stepNumber": 4,
+              "foot": "left",
+              "position": { "x": 0, "y": 46 },
+              "angle": -20,
+              "action": "plant",
+              "weight": 0.85,
+              "emphasis": true,
+              "duration": 0.12,
+              "teachDuration": 0.8,
+              "bodyAngle": -15,
+              "shoulderFake": null,
+              "headDirection": "forward-left",
+              "hipRotation": -15,
+              "armPosition": "driving arms forward-left",
+              "forceVector": { "angle": 120, "magnitude": 0.8 }
+            }
+          ]
+        },
+        {
+          "phase": "acceleration",
+          "description": "Burst forward-left past the defender",
+          "steps": [
+            {
+              "stepNumber": 5,
+              "foot": "right",
+              "position": { "x": -10, "y": 64 },
+              "angle": -15,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.15,
+              "teachDuration": 0.5,
+              "bodyAngle": -20,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": -15,
+              "armPosition": "sprinting form",
+              "forceVector": { "angle": 150, "magnitude": 0.8 }
+            }
+          ]
+        }
+      ],
+      "coachingCues": [
+        "The 'dead leg' barely touches the ground — like stepping on hot lava",
+        "Dip your shoulder on the dead leg side — sell it with your upper body",
+        "Keep your speed — this move works because you DON'T slow down much",
+        "Think 'soft step, hard step' — soft right, then HARD left",
+        "Eyes glance right during the drop, snap forward-left when you go"
+      ],
+      "commonMistakes": [
+        "Putting too much weight on the dead leg (defeats the purpose — it should be feather-light)",
+        "Over-exaggerating the dip (takes too long, defender recovers)",
+        "Stopping forward momentum during the drop (should barely decelerate)",
+        "Forgetting the shoulder dip (the leg alone isn't enough to sell it)",
+        "Dead leg stepping too far out (makes recovery step too long)"
+      ]
+    },
+    {
+      "id": "get-skinny",
+      "name": "Get Skinny",
+      "description": "Turn your body sideways to slip past a defender in tight space. No fake — just reduce your profile and slide through the gap. Essential for 5v5 where space is limited.",
+      "totalSteps": 5,
+      "approachDirection": "forward",
+      "exitDirection": "forward",
+      "phases": [
+        {
+          "phase": "approach",
+          "description": "Running forward toward the gap between defenders or past a single defender",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "foot": "right",
+              "position": { "x": 4, "y": 0 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.18,
+              "teachDuration": 0.6,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "normal running form",
+              "forceVector": { "angle": 180, "magnitude": 0.7 }
+            }
+          ]
+        },
+        {
+          "phase": "rotate",
+          "description": "Turn body sideways — lead shoulder points forward, trail shoulder points backward. Reduce profile from ~16 inches to ~8 inches.",
+          "steps": [
+            {
+              "stepNumber": 2,
+              "foot": "left",
+              "position": { "x": -2, "y": 18 },
+              "angle": 45,
+              "action": "pivot",
+              "weight": 0.7,
+              "emphasis": true,
+              "duration": 0.15,
+              "teachDuration": 0.8,
+              "bodyAngle": 70,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 60,
+              "armPosition": "lead (right) arm tucked in front, trail (left) arm tucked behind — make yourself narrow",
+              "forceVector": { "angle": 180, "magnitude": 0.6 }
+            },
+            {
+              "stepNumber": 3,
+              "foot": "right",
+              "position": { "x": 0, "y": 36 },
+              "angle": 50,
+              "action": "slide",
+              "weight": 0.6,
+              "emphasis": true,
+              "duration": 0.12,
+              "teachDuration": 0.7,
+              "bodyAngle": 80,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 70,
+              "armPosition": "arms tight to body — as narrow as possible",
+              "forceVector": { "angle": 180, "magnitude": 0.7 }
+            }
+          ]
+        },
+        {
+          "phase": "slip-through",
+          "description": "Slide through the gap maintaining narrow profile",
+          "steps": [
+            {
+              "stepNumber": 4,
+              "foot": "left",
+              "position": { "x": -2, "y": 52 },
+              "angle": 30,
+              "action": "slide",
+              "weight": 0.6,
+              "emphasis": false,
+              "duration": 0.12,
+              "teachDuration": 0.6,
+              "bodyAngle": 60,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 50,
+              "armPosition": "arms still tucked, beginning to open up",
+              "forceVector": { "angle": 180, "magnitude": 0.7 }
+            }
+          ]
+        },
+        {
+          "phase": "acceleration",
+          "description": "Rotate back to forward-facing and accelerate away",
+          "steps": [
+            {
+              "stepNumber": 5,
+              "foot": "right",
+              "position": { "x": 4, "y": 70 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.15,
+              "teachDuration": 0.5,
+              "bodyAngle": 10,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 5,
+              "armPosition": "back to sprinting form",
+              "forceVector": { "angle": 180, "magnitude": 0.8 }
+            }
+          ]
+        }
+      ],
+      "coachingCues": [
+        "Think 'turn sideways like you're walking through a doorway'",
+        "Lead shoulder points where you want to go",
+        "Tuck your arms in — don't let them stick out (that's where flags get grabbed!)",
+        "Keep your speed — don't slow down to turn, turn WHILE running",
+        "Head stays looking forward the whole time — watch where you're going"
+      ],
+      "commonMistakes": [
+        "Slowing down too much to turn sideways (should be fluid, not a stop-and-turn)",
+        "Arms sticking out (makes you wide again and flags are exposed)",
+        "Leaning away from defender (actually makes you easier to reach)",
+        "Turning the wrong way (lead with the shoulder AWAY from the defender)",
+        "Not opening back up after passing (stays sideways and loses speed)"
+      ]
+    },
+    {
+      "id": "speed-change",
+      "name": "Speed Change",
+      "description": "Hesitation / stop-and-go — decelerate dramatically to freeze the defender, then explode past them. Works because defenders match your speed, so when you slow down and they slow down, your burst catches them flat-footed.",
+      "totalSteps": 6,
+      "approachDirection": "forward",
+      "exitDirection": "forward",
+      "phases": [
+        {
+          "phase": "approach",
+          "description": "Running at full speed to establish the pace the defender will try to match",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "foot": "right",
+              "position": { "x": 4, "y": 0 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.15,
+              "teachDuration": 0.5,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "sprinting — fast arm drive",
+              "forceVector": { "angle": 180, "magnitude": 0.9 }
+            },
+            {
+              "stepNumber": 2,
+              "foot": "left",
+              "position": { "x": -4, "y": 22 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.15,
+              "teachDuration": 0.5,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "sprinting — fast arm drive",
+              "forceVector": { "angle": 180, "magnitude": 0.9 }
+            }
+          ]
+        },
+        {
+          "phase": "deceleration",
+          "description": "Sudden slowdown — short choppy steps, body rises slightly, arms slow down. The 'hesitation' that freezes the defender.",
+          "steps": [
+            {
+              "stepNumber": 3,
+              "foot": "right",
+              "position": { "x": 2, "y": 34 },
+              "angle": 0,
+              "action": "shuffle",
+              "weight": 0.6,
+              "emphasis": true,
+              "duration": 0.25,
+              "teachDuration": 1.0,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "arms slow dramatically — almost jogging pace",
+              "forceVector": { "angle": 160, "magnitude": 0.4 }
+            },
+            {
+              "stepNumber": 4,
+              "foot": "left",
+              "position": { "x": -2, "y": 42 },
+              "angle": 0,
+              "action": "shuffle",
+              "weight": 0.6,
+              "emphasis": true,
+              "duration": 0.25,
+              "teachDuration": 1.0,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "arms nearly stopped — selling the slowdown",
+              "forceVector": { "angle": 170, "magnitude": 0.3 }
+            }
+          ]
+        },
+        {
+          "phase": "explosion",
+          "description": "BURST — from near-stop to full sprint in one step. Low body angle, aggressive arm drive, maximum push-off force.",
+          "steps": [
+            {
+              "stepNumber": 5,
+              "foot": "right",
+              "position": { "x": 4, "y": 56 },
+              "angle": 0,
+              "action": "push-off",
+              "weight": 0.85,
+              "emphasis": true,
+              "duration": 0.1,
+              "teachDuration": 0.6,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "explosive arm drive — like sprinter out of blocks",
+              "forceVector": { "angle": 180, "magnitude": 1.0 }
+            },
+            {
+              "stepNumber": 6,
+              "foot": "left",
+              "position": { "x": -4, "y": 76 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.13,
+              "teachDuration": 0.5,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "full sprint form",
+              "forceVector": { "angle": 180, "magnitude": 0.9 }
+            }
+          ]
+        }
+      ],
+      "coachingCues": [
+        "Run FAST first — the move only works if you set up speed to change FROM",
+        "Slow down like you're done running — make the defender think the play is over",
+        "When you GO, lean forward and EXPLODE — be a rocket",
+        "Freeze the defender's feet — when they slow down with you, that's when you blast past",
+        "Arms tell the story — fast arms = fast, slow arms = slow, fast arms again = GONE"
+      ],
+      "commonMistakes": [
+        "Not running fast enough before the hesitation (no speed contrast = no effect)",
+        "Hesitating too long (gives defender time to recover and re-read you)",
+        "Gradual slowdown instead of sudden (must be a sharp speed change)",
+        "Not getting low on the burst (standing tall = slow acceleration)",
+        "Looking at the defender during hesitation (look past them, not at them)"
+      ]
+    },
+    {
+      "id": "shimmy",
+      "name": "Shimmy",
+      "description": "Stutter step / rapid side-to-side shake to freeze the defender. Quick lateral foot movements create indecision, then burst forward through whichever gap opens.",
+      "totalSteps": 7,
+      "approachDirection": "forward",
+      "exitDirection": "forward-left",
+      "phases": [
+        {
+          "phase": "approach",
+          "description": "Jogging forward, reading the defender, setting up the shimmy",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "foot": "right",
+              "position": { "x": 4, "y": 0 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.18,
+              "teachDuration": 0.6,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "normal running form",
+              "forceVector": { "angle": 180, "magnitude": 0.6 }
+            }
+          ]
+        },
+        {
+          "phase": "shimmy",
+          "description": "Rapid stutter steps side to side — quick, choppy foot movements. Weight stays centered. The defender can't tell which way you'll go.",
+          "steps": [
+            {
+              "stepNumber": 2,
+              "foot": "left",
+              "position": { "x": -8, "y": 16 },
+              "angle": -10,
+              "action": "shuffle",
+              "weight": 0.55,
+              "emphasis": true,
+              "duration": 0.1,
+              "teachDuration": 0.5,
+              "bodyAngle": -5,
+              "shoulderFake": "left",
+              "headDirection": "left",
+              "hipRotation": -5,
+              "armPosition": "arms out slightly for balance, quick movements",
+              "forceVector": { "angle": 100, "magnitude": 0.5 }
+            },
+            {
+              "stepNumber": 3,
+              "foot": "right",
+              "position": { "x": 8, "y": 22 },
+              "angle": 10,
+              "action": "shuffle",
+              "weight": 0.55,
+              "emphasis": true,
+              "duration": 0.1,
+              "teachDuration": 0.5,
+              "bodyAngle": 5,
+              "shoulderFake": "right",
+              "headDirection": "right",
+              "hipRotation": 5,
+              "armPosition": "arms mirror the shuffle — quick side to side",
+              "forceVector": { "angle": 260, "magnitude": 0.5 }
+            },
+            {
+              "stepNumber": 4,
+              "foot": "left",
+              "position": { "x": -6, "y": 28 },
+              "angle": -8,
+              "action": "shuffle",
+              "weight": 0.55,
+              "emphasis": true,
+              "duration": 0.1,
+              "teachDuration": 0.5,
+              "bodyAngle": -5,
+              "shoulderFake": "left",
+              "headDirection": "left",
+              "hipRotation": -5,
+              "armPosition": "still shaking side to side",
+              "forceVector": { "angle": 110, "magnitude": 0.5 }
+            },
+            {
+              "stepNumber": 5,
+              "foot": "right",
+              "position": { "x": 4, "y": 34 },
+              "angle": 5,
+              "action": "shuffle",
+              "weight": 0.55,
+              "emphasis": false,
+              "duration": 0.1,
+              "teachDuration": 0.5,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "settling, preparing to burst",
+              "forceVector": { "angle": 250, "magnitude": 0.4 }
+            }
+          ]
+        },
+        {
+          "phase": "burst",
+          "description": "Pick a side and EXPLODE — in this case, bursting forward-left off the right foot",
+          "steps": [
+            {
+              "stepNumber": 6,
+              "foot": "right",
+              "position": { "x": 4, "y": 38 },
+              "angle": -15,
+              "action": "plant",
+              "weight": 0.85,
+              "emphasis": true,
+              "duration": 0.1,
+              "teachDuration": 0.6,
+              "bodyAngle": -20,
+              "shoulderFake": null,
+              "headDirection": "forward-left",
+              "hipRotation": -15,
+              "armPosition": "driving arms forward-left",
+              "forceVector": { "angle": 120, "magnitude": 0.95 }
+            },
+            {
+              "stepNumber": 7,
+              "foot": "left",
+              "position": { "x": -10, "y": 56 },
+              "angle": -15,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.14,
+              "teachDuration": 0.5,
+              "bodyAngle": -20,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": -15,
+              "armPosition": "sprinting form",
+              "forceVector": { "angle": 150, "magnitude": 0.85 }
+            }
+          ]
+        }
+      ],
+      "coachingCues": [
+        "Quick feet! Tap-tap-tap-tap like the ground is hot",
+        "Don't go too wide — small, fast movements, not big lunges",
+        "Keep your weight CENTERED during the shimmy — don't commit until you burst",
+        "Watch the defender's hips — when they shift one way, you go the OTHER way",
+        "The shimmy is the question, the burst is the answer"
+      ],
+      "commonMistakes": [
+        "Shimmy steps too wide (takes too long to recover and burst)",
+        "Committing weight during the shimmy (if you lean, you're stuck going that way)",
+        "Too many shimmy steps (2-4 is enough — more than that and you're dancing, not playing)",
+        "Shimmy without forward progress (you should still be moving slightly forward)",
+        "Bursting too early before defender is frozen (need them uncertain first)"
+      ]
+    },
+    {
+      "id": "spin",
+      "name": "Spin",
+      "description": "Plant the outside foot, execute a 360° spin rotation toward the inside, and accelerate out. A flashy move that, when executed well, creates complete separation from the defender.",
+      "totalSteps": 5,
+      "approachDirection": "forward",
+      "exitDirection": "forward-left",
+      "phases": [
+        {
+          "phase": "approach",
+          "description": "Running forward toward the defender, slightly angled to set up the spin direction",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "foot": "left",
+              "position": { "x": -4, "y": 0 },
+              "angle": 0,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.18,
+              "teachDuration": 0.6,
+              "bodyAngle": 0,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 0,
+              "armPosition": "normal running form",
+              "forceVector": { "angle": 180, "magnitude": 0.7 }
+            }
+          ]
+        },
+        {
+          "phase": "plant",
+          "description": "Plant the OUTSIDE (right) foot firmly — this is the pivot point for the entire spin. Foot points slightly outward to create stable pivot base.",
+          "steps": [
+            {
+              "stepNumber": 2,
+              "foot": "right",
+              "position": { "x": 6, "y": 18 },
+              "angle": 30,
+              "action": "plant",
+              "weight": 0.95,
+              "emphasis": true,
+              "duration": 0.1,
+              "teachDuration": 1.0,
+              "bodyAngle": 10,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": 5,
+              "armPosition": "right arm pulls in tight to body, left arm begins sweeping across to initiate rotation",
+              "forceVector": { "angle": 180, "magnitude": 0.8 }
+            }
+          ]
+        },
+        {
+          "phase": "spin",
+          "description": "360° rotation — spin TOWARD the inside (left/counterclockwise). Left shoulder pulls back, right foot pivots on ball of foot. Left foot sweeps through. Keep body compact for fast rotation.",
+          "steps": [
+            {
+              "stepNumber": 3,
+              "foot": "right",
+              "position": { "x": 6, "y": 18 },
+              "angle": 180,
+              "action": "pivot",
+              "weight": 0.9,
+              "emphasis": true,
+              "duration": 0.2,
+              "teachDuration": 1.2,
+              "bodyAngle": 180,
+              "shoulderFake": null,
+              "headDirection": "backward (mid-rotation)",
+              "hipRotation": 180,
+              "armPosition": "arms tucked tight to chest — like a figure skater spinning. Compact = fast.",
+              "forceVector": { "angle": 0, "magnitude": 0.3 }
+            },
+            {
+              "stepNumber": 4,
+              "foot": "left",
+              "position": { "x": -4, "y": 24 },
+              "angle": -20,
+              "action": "push-off",
+              "weight": 0.8,
+              "emphasis": true,
+              "duration": 0.12,
+              "teachDuration": 0.8,
+              "bodyAngle": 350,
+              "shoulderFake": null,
+              "headDirection": "forward (completing rotation)",
+              "hipRotation": 345,
+              "armPosition": "arms release from tucked position and drive forward to accelerate",
+              "forceVector": { "angle": 150, "magnitude": 0.9 }
+            }
+          ]
+        },
+        {
+          "phase": "acceleration",
+          "description": "Burst out of the spin — full speed forward at a new angle",
+          "steps": [
+            {
+              "stepNumber": 5,
+              "foot": "right",
+              "position": { "x": -6, "y": 42 },
+              "angle": -10,
+              "action": "stride",
+              "weight": 0.5,
+              "emphasis": false,
+              "duration": 0.14,
+              "teachDuration": 0.5,
+              "bodyAngle": -15,
+              "shoulderFake": null,
+              "headDirection": "forward",
+              "hipRotation": -10,
+              "armPosition": "full sprint form",
+              "forceVector": { "angle": 160, "magnitude": 0.85 }
+            }
+          ]
+        }
+      ],
+      "coachingCues": [
+        "Plant your OUTSIDE foot hard — that's your anchor",
+        "Tuck your arms in tight when spinning — tight = fast, loose = slow and wobbly",
+        "Spin TOWARD the inside — away from the defender",
+        "Eyes find forward FAST — as soon as you come around, look where you're going",
+        "Burst OUT of the spin — don't finish the spin and then start running"
+      ],
+      "commonMistakes": [
+        "Spinning away from the defender instead of toward inside (goes the wrong way)",
+        "Arms flailing during the spin (slows rotation, lose balance)",
+        "Not planting firmly enough (foot slips, spin collapses)",
+        "Completing the spin but then standing still (must explode out immediately)",
+        "Spinning too wide — pivot should be tight, almost on the same spot",
+        "Looking down during the spin (lose orientation, can't find the field)"
+      ]
+    }
+  ]
+}
