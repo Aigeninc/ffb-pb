@@ -1,6 +1,6 @@
 # PRACTICE PLANNER SPEC
 
-**Status:** SPEC ONLY — needs builder agent  
+**Status:** BUILT — 2026-03-17  
 **Estimated new code:** ~1,100 lines (drill data ~300, module ~450, HTML ~50, CSS ~300)  
 **Date:** 2026-03-17  
 **Author:** UX Design Agent
