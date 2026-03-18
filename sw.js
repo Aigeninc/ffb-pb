@@ -1,6 +1,6 @@
 // Service Worker for offline support
 // Update CACHE_VERSION when assets change to bust old caches
-const CACHE_VERSION = '20260316-rollback-clean';
+const CACHE_VERSION = '20260317-practice-planner';
 const CACHE_NAME = 'playbook-' + CACHE_VERSION;
 
 const ASSETS = [
