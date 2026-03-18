@@ -2,7 +2,8 @@
 // PLAYS and PLAYERS are globals from plays.js
 
 import {
-  state, POSITIONS, LOCKED_PLAYERS, DEFAULT_LINEUP, getLineupSubs, getDisplayNameForPlay, saveSubstitutions,
+  state, POSITIONS, LOCKED_PLAYERS, DEFAULT_LINEUP, getLineupSubs, getDisplayNameForPlay,
+  saveSubstitutions, savePlayerPlaybooks, getPlaysForTag,
 } from './state.js';
 import { drawFrame } from './renderer.js';
 import { buildPlaySelector, buildPlayerFilter } from './ui.js';
@@ -296,6 +297,17 @@ function renderRoutesPlayerSelect() {
     btn.innerHTML = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${player.color};margin-right:4px"></span>${player.name}`;
     btn.addEventListener('click', () => openMyRoutes(player.name));
 
+    const playbookBtn = document.createElement('button');
+    playbookBtn.className = 'playbook-edit-btn';
+    playbookBtn.textContent = '📋';
+    playbookBtn.title = `Edit ${player.name}'s Playbook`;
+    const hasBook = state.playerPlaybooks[player.name] && state.playerPlaybooks[player.name].length > 0;
+    if (hasBook) playbookBtn.style.opacity = '1';
+    playbookBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openPlaybookEditor(player.name);
+    });
+
     const shareBtn = document.createElement('button');
     shareBtn.className = 'share-link-btn';
     shareBtn.textContent = '📤';
@@ -312,6 +324,7 @@ function renderRoutesPlayerSelect() {
     });
 
     row.appendChild(btn);
+    row.appendChild(playbookBtn);
     row.appendChild(shareBtn);
     select.appendChild(row);
   });
@@ -543,6 +556,127 @@ export function openMyRoutes(playerName) {
       drawFrame();
     });
     grid.appendChild(chip);
+  });
+}
+
+// ── Playbook Editor ───────────────────────────────────────────
+
+export function openPlaybookEditor(playerName) {
+  const section = document.getElementById('routes-section');
+  if (!section) return;
+
+  section.style.display = 'block';
+
+  // Get current playbook entries for this player
+  const existingBook = state.playerPlaybooks[playerName] || [];
+
+  // Determine which plays to show (filtered by active tag if set)
+  const plays = state.activePlaySetTag && state.activePlaySetTag !== 'all'
+    ? getPlaysForTag(state.activePlaySetTag)
+    : PLAYS;
+
+  // Determine default position for this player (for starters)
+  const lineup = getCurrentLineup();
+  let defaultPosition = null;
+  for (const [pos, name] of Object.entries(lineup)) {
+    if (name === playerName) { defaultPosition = pos; break; }
+  }
+  const isStarter = defaultPosition !== null;
+
+  // Build entry map from existing book: playIdx → entry
+  const entryMap = {};
+  existingBook.forEach(e => { entryMap[e.playIdx] = e; });
+
+  section.innerHTML = `
+    <div class="routes-header">
+      <button class="routes-close-btn playbook-back-btn" id="playbook-back-btn">← Back</button>
+      <span class="routes-title">📋 ${playerName}'s Playbook</span>
+    </div>
+    <div class="playbook-editor-list" id="playbook-editor-list"></div>
+    <div class="playbook-editor-footer">
+      <button class="playbook-save-btn" id="playbook-save-btn">💾 Save Playbook</button>
+    </div>
+  `;
+
+  document.getElementById('playbook-back-btn')?.addEventListener('click', () => {
+    section.style.display = 'none';
+  });
+
+  const list = document.getElementById('playbook-editor-list');
+
+  plays.forEach((play, idx) => {
+    const playIdx = PLAYS.indexOf(play);
+    const existing = entryMap[playIdx];
+
+    // For starters: pre-check their default plays with default position
+    let isChecked = false;
+    let selectedPos = defaultPosition || 'WR1';
+
+    if (existing) {
+      isChecked = true;
+      selectedPos = existing.position;
+    } else if (isStarter) {
+      // Starter: pre-check if they appear in the play directly
+      const appearsInPlay = Object.keys(play.players).some(pName => pName === playerName);
+      if (appearsInPlay) {
+        isChecked = true;
+        selectedPos = defaultPosition;
+      }
+    }
+
+    const row = document.createElement('div');
+    row.className = 'playbook-play-row' + (isChecked ? ' checked' : '');
+    row.dataset.playIdx = playIdx;
+
+    row.innerHTML = `
+      <label class="playbook-row-check">
+        <input type="checkbox" class="playbook-check" data-play-idx="${playIdx}" ${isChecked ? 'checked' : ''}>
+        <span class="playbook-play-name">${play.name}</span>
+        <span class="playbook-play-form">${play.formation}</span>
+      </label>
+      <select class="playbook-pos-select" data-play-idx="${playIdx}" ${!isChecked ? 'disabled' : ''}>
+        ${POSITIONS.map(p => `<option value="${p}" ${p === selectedPos ? 'selected' : ''}>${p}</option>`).join('')}
+      </select>
+    `;
+
+    const checkbox = row.querySelector('.playbook-check');
+    const select = row.querySelector('.playbook-pos-select');
+
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        row.classList.add('checked');
+        select.disabled = false;
+      } else {
+        row.classList.remove('checked');
+        select.disabled = true;
+      }
+    });
+
+    list.appendChild(row);
+  });
+
+  document.getElementById('playbook-save-btn')?.addEventListener('click', () => {
+    const entries = [];
+    list.querySelectorAll('.playbook-play-row').forEach(row => {
+      const playIdx = parseInt(row.dataset.playIdx);
+      const checkbox = row.querySelector('.playbook-check');
+      const select = row.querySelector('.playbook-pos-select');
+      if (checkbox.checked) {
+        const position = select.value;
+        // Determine replacesPlayer from DEFAULT_LINEUP
+        const replacesPlayer = DEFAULT_LINEUP[position] || null;
+        entries.push({ playIdx, position, replacesPlayer });
+      }
+    });
+
+    state.playerPlaybooks[playerName] = entries;
+    savePlayerPlaybooks();
+    section.style.display = 'none';
+
+    // Refresh the routes player select to update 📋 badge
+    renderRoutesPlayerSelect();
+
+    showToast(`✓ ${playerName}'s playbook saved (${entries.length} plays)`);
   });
 }
 

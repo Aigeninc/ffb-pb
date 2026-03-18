@@ -2035,3 +2035,145 @@ body.sunlight .player-nav-btn { background: #e0e0e0; color: #000; border-color: 
 body.sunlight .gd-section-header { color: #333; }
 
 body.sunlight .empty-state { color: #666; }
+
+/* ── Playbook Editor (Roster Panel) ──────────────────────── */
+.playbook-edit-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.playbook-edit-btn:hover { opacity: 1; }
+
+.playbook-editor-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 4px 0;
+  max-height: 340px;
+}
+
+.playbook-play-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  opacity: 0.5;
+  transition: opacity 0.15s, background 0.15s;
+}
+.playbook-play-row.checked {
+  opacity: 1;
+  background: rgba(34, 197, 94, 0.06);
+}
+
+.playbook-row-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  cursor: pointer;
+}
+.playbook-row-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #22c55e;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.playbook-play-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.playbook-play-form {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+
+.playbook-pos-select {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  min-width: 60px;
+}
+.playbook-pos-select:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.playbook-editor-footer {
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.playbook-save-btn {
+  width: 100%;
+  background: #16532d;
+  color: #4ade80;
+  border: 1.5px solid #22c55e;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.playbook-save-btn:active { background: #0f3d20; }
+
+.playbook-back-btn {
+  background: none !important;
+  border: none !important;
+  color: var(--accent) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 4px 8px !important;
+  cursor: pointer;
+}
+
+/* ── Player Highlight Toggle ─────────────────────────────── */
+.player-highlight-toggle {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  color: var(--text-dim);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.player-highlight-toggle.active {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #22c55e;
+  color: #4ade80;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+}
+.player-highlight-toggle:active { transform: scale(0.95); }
+
+/* ── Player Position Badge ───────────────────────────────── */
+.player-position-badge {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  padding: 5px 12px;
+  margin: 0 8px 4px;
+}
+
+body.sunlight .player-highlight-toggle { background: #e0e0e0; color: #333; border-color: #999; }
+body.sunlight .player-highlight-toggle.active { background: #c8f7d6; border-color: #22c55e; color: #065f46; }
+body.sunlight .player-position-badge { background: #fff8e1; border-color: #f59e0b; color: #92400e; }

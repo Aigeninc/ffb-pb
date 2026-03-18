@@ -77,6 +77,14 @@ export const state = {
   playerModeFamilies: null,  // array of family slugs or null
   playerModePlays: null,     // array of play names or null
 
+  // ── Per-Player Playbooks ──────────────────────────────────
+  // { playerName: [ { playIdx, position, replacesPlayer } ] }
+  playerPlaybooks: {},
+  // Session-only sub overlay for player mode — not persisted
+  playerModeSubOverlay: {},  // { playIdx: { origName: playerName } }
+  // Highlight toggle for player mode
+  playerHighlightEnabled: true,
+
   // ── Active Play Set Tag (predefined set selector) ─────────
   activePlaySetTag: 'core',  // 'core'|'extended'|'2back'|'nrz'|'exotic'|'all'|'custom'
 
@@ -128,11 +136,12 @@ export function getLineupSubs() {
   return result;
 }
 
-// Get all active subs for current play: lineup subs + per-play overrides (per-play wins)
+// Get all active subs for current play: lineup subs + per-play overrides + player mode overlay
 export function getActiveSubs() {
   const lineupSubs = getLineupSubs();
   const perPlaySubs = state.substitutions[state.currentPlayIdx] || {};
-  return { ...lineupSubs, ...perPlaySubs };
+  const overlaySubs = state.playerModeSubOverlay[state.currentPlayIdx] || {};
+  return { ...lineupSubs, ...perPlaySubs, ...overlaySubs };
 }
 
 // Get per-play subs only (without lineup subs)
@@ -141,6 +150,10 @@ export function getPerPlaySubs() {
 }
 
 export function getDisplayName(originalName) {
+  // Player mode sub overlay takes highest priority (session-only, not persisted)
+  const overlayPlaySubs = state.playerModeSubOverlay[state.currentPlayIdx] || {};
+  if (overlayPlaySubs[originalName]) return overlayPlaySubs[originalName];
+
   // Per-play subs take priority over lineup subs
   const perPlaySubs = state.substitutions[state.currentPlayIdx] || {};
   if (perPlaySubs[originalName]) return perPlaySubs[originalName];
@@ -178,11 +191,21 @@ export function getAvailableSubs(targetOriginal) {
 
 // Get display name for a specific play (not the currently viewed play)
 export function getDisplayNameForPlay(originalName, playIdx) {
+  // Player mode overlay first
+  const overlayPlaySubs = state.playerModeSubOverlay[playIdx] || {};
+  if (overlayPlaySubs[originalName]) return overlayPlaySubs[originalName];
   const perPlaySubs = state.substitutions[playIdx] || {};
   if (perPlaySubs[originalName]) return perPlaySubs[originalName];
   const lineupSubs = getLineupSubs();
   if (lineupSubs[originalName]) return lineupSubs[originalName];
   return originalName;
+}
+
+// Get the playbook entry for a player on a specific play
+export function getPlayerPlaybookEntry(playerName, playIdx) {
+  const book = state.playerPlaybooks[playerName];
+  if (!book) return null;
+  return book.find(e => e.playIdx === playIdx) || null;
 }
 
 // ── Play Validation ───────────────────────────────────────────
@@ -370,6 +393,13 @@ export function parseURLParams() {
 }
 
 export function getPlayerModePlays() {
+  // If a playbook exists for this player, use it directly
+  if (state.playerModeName && state.playerPlaybooks[state.playerModeName] &&
+      state.playerPlaybooks[state.playerModeName].length > 0) {
+    const entries = state.playerPlaybooks[state.playerModeName];
+    return entries.map(e => PLAYS[e.playIdx]).filter(Boolean);
+  }
+
   let pool = PLAYS;
 
   // Filter to plays this player appears in (including sub appearances)
@@ -440,5 +470,53 @@ export function loadSubstitutions() {
     if (raw) {
       state.substitutions = JSON.parse(raw);
     }
+  } catch (e) {}
+}
+
+// ── Player Mode Sub Overlay Application ──────────────────────
+
+// Apply session-only substitution overlay from a player's playbook.
+// Call this whenever playerModeName is set (picker or URL).
+export function applyPlayerModeSubOverlay(playerName) {
+  const book = state.playerPlaybooks[playerName];
+  state.playerModeSubOverlay = {};
+  if (!book || book.length === 0) return;
+  book.forEach(entry => {
+    if (entry.replacesPlayer && entry.replacesPlayer !== playerName) {
+      if (!state.playerModeSubOverlay[entry.playIdx]) {
+        state.playerModeSubOverlay[entry.playIdx] = {};
+      }
+      state.playerModeSubOverlay[entry.playIdx][entry.replacesPlayer] = playerName;
+    }
+  });
+}
+
+// ── Player Playbooks ──────────────────────────────────────────
+
+export function savePlayerPlaybooks() {
+  try {
+    localStorage.setItem('playbook:playerPlaybooks', JSON.stringify(state.playerPlaybooks));
+  } catch (e) {}
+}
+
+export function loadPlayerPlaybooks() {
+  try {
+    const raw = localStorage.getItem('playbook:playerPlaybooks');
+    if (raw) state.playerPlaybooks = JSON.parse(raw);
+  } catch (e) {}
+}
+
+// ── Player Highlight Preference ───────────────────────────────
+
+export function savePlayerHighlight() {
+  try {
+    localStorage.setItem('playbook:playerHighlight', state.playerHighlightEnabled ? '1' : '0');
+  } catch (e) {}
+}
+
+export function loadPlayerHighlight() {
+  try {
+    const raw = localStorage.getItem('playbook:playerHighlight');
+    if (raw !== null) state.playerHighlightEnabled = raw !== '0';
   } catch (e) {}
 }

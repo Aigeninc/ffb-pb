@@ -6,6 +6,7 @@ import {
   saveSunlightMode, saveSubstitutions, saveActivePlaySet,
   saveActivePlaySetTag, getPlaysForTag,
   saveActiveFamily, getFilteredPlays, getPlayerModePlays, getLineupSubs,
+  getPlayerPlaybookEntry, applyPlayerModeSubOverlay,
 } from './state.js';
 import { drawFrame } from './renderer.js';
 import { togglePlayPause, replay, updateTimer } from './animation.js';
@@ -549,8 +550,25 @@ export function updateInfoPanel() {
     if (formEl) formEl.textContent = play.name;
     if (wtuEl) wtuEl.innerHTML = `<span style="font-size:18px;font-weight:bold;color:#22c55e;">🏈 YOUR JOB</span>`;
     if (notesEl) notesEl.innerHTML = `<span style="font-size:15px;color:#e0e0e0;line-height:1.4;">${instruction}</span>`;
+
+    // Show position badge from playbook entry
+    const playIdx = PLAYS.indexOf(play);
+    const entry = getPlayerPlaybookEntry(state.playerModeName, playIdx);
+    const badge = document.getElementById('player-position-badge');
+    if (badge) {
+      if (entry && entry.position) {
+        badge.textContent = `📍 Line up as: ${entry.position}`;
+        badge.style.display = '';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
     return;
   }
+
+  // Hide position badge in non-player modes
+  const badge = document.getElementById('player-position-badge');
+  if (badge) badge.style.display = 'none';
 
   // formation-label: always show play name + formation (dimmed, compact)
   document.getElementById('formation-label').textContent = play.name + ' · ' + play.formation;
@@ -604,6 +622,8 @@ export function showPlayerPicker() {
     btn.addEventListener('click', () => {
       state.playerModeName = name;
       try { localStorage.setItem('playbook:playerName', name); } catch(e) {}
+      // Apply playbook sub overlay for this player
+      applyPlayerModeSubOverlay(name);
       overlay.style.display = 'none';
       buildPlaySelector();
       // Select first play and auto-replay

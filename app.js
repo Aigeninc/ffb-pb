@@ -4,6 +4,7 @@
 import {
   state, getAnimStart, loadQueueState, loadPreferences, loadCustomPlays, loadSubstitutions,
   loadActivePlaySet, loadActivePlaySetTag, parseURLParams, getPlayerModePlays,
+  loadPlayerPlaybooks, loadPlayerHighlight, savePlayerHighlight, applyPlayerModeSubOverlay,
 } from './modules/state.js';
 
 import {
@@ -49,6 +50,8 @@ import {
   setupGamedayPanel, openGamedayPanel, closeGamedayPanel,
   setSelectPlayFn as gamedaySetSelectPlay,
 } from './modules/gameday.js';
+
+
 
 // ── selectPlay — central navigation function ──────────────────
 
@@ -152,6 +155,8 @@ function init() {
   loadQueueState();
   loadCustomPlays(); // Load custom plays from localStorage into PLAYS array
   loadSubstitutions();    // Load persisted per-play subs
+  loadPlayerPlaybooks();  // Load per-player playbooks
+  loadPlayerHighlight();  // Load player highlight preference
   loadActivePlaySet();    // Load game day play filter (custom set)
   loadActivePlaySetTag(); // Load predefined set tag (core/extended/etc.)
 
@@ -219,26 +224,44 @@ function init() {
     }
   }
 
-  // Player mode: prev/next nav buttons
+  // Player mode: apply playbook sub overlay and wire up UI
+  if (state.appMode === 'player' && state.playerModeName) {
+    applyPlayerModeSubOverlay(state.playerModeName);
+  }
+
+  // Player mode: prev/next nav buttons + highlight toggle + position badge
   if (state.appMode === 'player') {
     const navEl = document.getElementById('player-nav');
     if (navEl) navEl.style.display = '';
 
     const prevBtn = document.getElementById('btn-prev-play');
     const nextBtn = document.getElementById('btn-next-play');
-    const playerPlays = getPlayerModePlays();
 
     if (prevBtn) prevBtn.addEventListener('click', () => {
+      const playerPlays = getPlayerModePlays();
       const currentIdx = playerPlays.findIndex(p => PLAYS.indexOf(p) === state.currentPlayIdx);
       const prevIdx = currentIdx > 0 ? currentIdx - 1 : playerPlays.length - 1;
       selectPlay(PLAYS.indexOf(playerPlays[prevIdx]));
     });
 
     if (nextBtn) nextBtn.addEventListener('click', () => {
+      const playerPlays = getPlayerModePlays();
       const currentIdx = playerPlays.findIndex(p => PLAYS.indexOf(p) === state.currentPlayIdx);
       const nextIdx = currentIdx < playerPlays.length - 1 ? currentIdx + 1 : 0;
       selectPlay(PLAYS.indexOf(playerPlays[nextIdx]));
     });
+
+    // Highlight toggle button
+    const highlightToggle = document.getElementById('btn-highlight-toggle');
+    if (highlightToggle) {
+      highlightToggle.classList.toggle('active', state.playerHighlightEnabled);
+      highlightToggle.addEventListener('click', () => {
+        state.playerHighlightEnabled = !state.playerHighlightEnabled;
+        highlightToggle.classList.toggle('active', state.playerHighlightEnabled);
+        savePlayerHighlight();
+        drawFrame();
+      });
+    }
   }
 
   // Start from pre-snap and auto-play
