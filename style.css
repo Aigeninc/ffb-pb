@@ -1061,6 +1061,82 @@ body.sunlight .ctrl-btn.sunlight-active { background: #f5d742; color: #000; }
   font-style: italic;
 }
 
+/* Bench separator inside lineup grid */
+.lineup-bench-separator {
+  width: 100%;
+  font-size: 9px;
+  font-weight: 800;
+  color: #2563eb;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 6px 0 2px;
+  text-transform: uppercase;
+}
+
+.lineup-bench-empty {
+  width: 100%;
+  font-size: 11px;
+  color: #555;
+  text-align: center;
+  padding: 4px 0;
+  font-style: italic;
+}
+
+/* Bench slots in lineup grid — dimmed, dashed border */
+.lineup-slot.bench-slot {
+  opacity: 0.75;
+}
+.lineup-slot.bench-slot .lineup-slot-circle {
+  border-style: dashed !important;
+  border-color: #1e3a5f !important;
+  background: rgba(0,0,0,0.3) !important;
+}
+.lineup-slot.bench-slot .lineup-slot-pos {
+  color: #2563eb;
+  font-size: 8px;
+}
+
+/* Swap selected state — pulsing glow */
+.lineup-slot.swap-selected {
+  background: rgba(245, 158, 11, 0.15) !important;
+  border-color: #f59e0b !important;
+}
+.lineup-slot.swap-selected .lineup-slot-circle {
+  border-color: #f59e0b !important;
+  border-style: solid !important;
+  animation: swap-pulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes swap-pulse {
+  from { box-shadow: 0 0 6px rgba(245,158,11,0.4); transform: scale(1.05); }
+  to   { box-shadow: 0 0 16px rgba(245,158,11,0.9); transform: scale(1.12); }
+}
+
+/* Swap toast notification */
+.swap-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: #16a34a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 24px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+.swap-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+/* Lock toast uses warning color */
+.swap-toast:not(.visible) { pointer-events: none; }
+
 /* Rotation bar */
 .rotation-bar {
   padding: 4px 0;

@@ -2,7 +2,7 @@
 // PLAYS and PLAYERS are globals from plays.js
 
 import {
-  state, POSITIONS, DEFAULT_LINEUP, getLineupSubs, getDisplayNameForPlay, saveSubstitutions,
+  state, POSITIONS, LOCKED_PLAYERS, DEFAULT_LINEUP, getLineupSubs, getDisplayNameForPlay, saveSubstitutions,
 } from './state.js';
 import { drawFrame } from './renderer.js';
 import { buildPlaySelector, buildPlayerFilter } from './ui.js';
@@ -17,8 +17,11 @@ const PLAYER_COLORS = [
   '#be185d', '#0f172a',
 ];
 
-// Currently selected lineup slot for sub assignment
-let selectedLineupSlot = null;
+// Currently selected player for universal swap: { name, pos } where pos=null means bench
+let selectedPlayer = null;
+
+// Map of locked players to their locked positions
+const LOCK_MAP = { 'Braelyn': 'QB', 'Lenox': 'C' };
 
 // ── Panel open/close ──────────────────────────────────────────
 
@@ -26,7 +29,7 @@ export function openRosterPanel() {
   const panel = document.getElementById('roster-panel');
   const backdrop = document.getElementById('roster-backdrop');
   if (!panel) return;
-  selectedLineupSlot = null;
+  selectedPlayer = null;
   panel.classList.add('open');
   if (backdrop) backdrop.classList.add('visible');
   renderRosterPanel();
@@ -36,7 +39,7 @@ export function closeRosterPanel() {
   const panel = document.getElementById('roster-panel');
   const backdrop = document.getElementById('roster-backdrop');
   if (!panel) return;
-  selectedLineupSlot = null;
+  selectedPlayer = null;
   panel.classList.remove('open');
   if (backdrop) backdrop.classList.remove('visible');
   // Hide any open sub-sections
@@ -61,44 +64,149 @@ function renderLineupGrid() {
   grid.innerHTML = '';
 
   const lineup = getCurrentLineup();
+
+  // ── Active position slots ─────────────────────────────────
   POSITIONS.forEach(pos => {
     const playerName = lineup[pos];
-    const color = playerName ? getPlayerDisplayColor(playerName) : '#444';
-    const shortName = playerName ? playerName.substring(0, 4) : '---';
-    const isSelected = selectedLineupSlot === pos;
-
-    const slot = document.createElement('div');
-    slot.className = 'lineup-slot' + (isSelected ? ' selected' : '') + (!playerName ? ' empty' : '');
-
-    slot.innerHTML = `
-      <div class="lineup-slot-pos">${pos}</div>
-      <div class="lineup-slot-circle" style="background:${color};border-color:${isSelected ? '#fff' : color}">
-        <span class="lineup-slot-name">${shortName}</span>
-      </div>
-    `;
-
+    const isSelected = selectedPlayer && selectedPlayer.name === playerName && selectedPlayer.pos === pos;
+    const slot = createPlayerSlot({ label: pos, playerName, isSelected, isBench: false });
     slot.addEventListener('click', () => {
-      if (selectedLineupSlot === pos) {
-        selectedLineupSlot = null;
-      } else {
-        selectedLineupSlot = pos;
-      }
-      renderRosterPanel();
+      if (playerName) handlePlayerTap(playerName, pos);
     });
-
     grid.appendChild(slot);
   });
 
-  // Instruction hint
+  // ── Bench separator ───────────────────────────────────────
+  const sep = document.createElement('div');
+  sep.className = 'lineup-bench-separator';
+  sep.textContent = '── BENCH ──';
+  grid.appendChild(sep);
+
+  // ── Bench player slots ────────────────────────────────────
+  const starters = new Set(Object.values(lineup).filter(Boolean));
+  const benchPlayers = state.roster.filter(p => !starters.has(p.name));
+
+  if (benchPlayers.length === 0) {
+    const emptyBench = document.createElement('div');
+    emptyBench.className = 'lineup-bench-empty';
+    emptyBench.textContent = 'All players are in lineup';
+    grid.appendChild(emptyBench);
+  } else {
+    benchPlayers.forEach(player => {
+      const isSelected = selectedPlayer && selectedPlayer.name === player.name && selectedPlayer.pos === null;
+      const slot = createPlayerSlot({ label: 'BENCH', playerName: player.name, isSelected, isBench: true });
+      slot.addEventListener('click', () => handlePlayerTap(player.name, null));
+      grid.appendChild(slot);
+    });
+  }
+
+  // ── Instruction hint ──────────────────────────────────────
   const hint = document.createElement('div');
   hint.className = 'lineup-hint';
-  if (selectedLineupSlot) {
-    hint.textContent = `Tap a bench player to put them at ${selectedLineupSlot}`;
+  if (selectedPlayer) {
+    hint.textContent = `${selectedPlayer.name} selected — tap another to swap`;
     hint.style.color = '#f59e0b';
   } else {
-    hint.textContent = 'Tap a position to swap';
+    hint.textContent = 'Tap any player to select • tap another to swap';
   }
   grid.appendChild(hint);
+}
+
+function createPlayerSlot({ label, playerName, isSelected, isBench }) {
+  const color = playerName ? getPlayerDisplayColor(playerName) : '#444';
+  const shortName = playerName ? playerName.substring(0, 4) : '---';
+
+  const slot = document.createElement('div');
+  let cls = 'lineup-slot';
+  if (isBench) cls += ' bench-slot';
+  if (isSelected) cls += ' swap-selected';
+  if (!playerName) cls += ' empty';
+  slot.className = cls;
+
+  slot.innerHTML = `
+    <div class="lineup-slot-pos${isBench ? ' bench-pos-label' : ''}">${label}</div>
+    <div class="lineup-slot-circle" style="background:${isBench ? 'rgba(0,0,0,0.3)' : color};border-color:${isSelected ? '#f59e0b' : (isBench ? '#1e3a5f' : color)}">
+      <span class="lineup-slot-name" style="color:${isBench ? color : '#fff'}">${shortName}</span>
+    </div>
+  `;
+
+  return slot;
+}
+
+// ── Universal swap logic ──────────────────────────────────────
+
+function handlePlayerTap(playerName, pos) {
+  // pos = position string for active players, null for bench
+
+  if (!selectedPlayer) {
+    // Nothing selected yet — select this player
+    selectedPlayer = { name: playerName, pos };
+    renderRosterPanel();
+    return;
+  }
+
+  if (selectedPlayer.name === playerName) {
+    // Tap same player: deselect
+    selectedPlayer = null;
+    renderRosterPanel();
+    return;
+  }
+
+  // Check LOCKED_PLAYERS: locked players cannot be moved from their locked position
+  if (LOCK_MAP[selectedPlayer.name] && selectedPlayer.pos === LOCK_MAP[selectedPlayer.name]) {
+    showToast(`🔒 ${selectedPlayer.name} is locked at ${selectedPlayer.pos}`);
+    selectedPlayer = null;
+    renderRosterPanel();
+    return;
+  }
+  if (LOCK_MAP[playerName] && pos === LOCK_MAP[playerName]) {
+    showToast(`🔒 ${playerName} is locked at ${pos}`);
+    selectedPlayer = null;
+    renderRosterPanel();
+    return;
+  }
+
+  doSwap(selectedPlayer, { name: playerName, pos });
+}
+
+function doSwap(a, b) {
+  if (!a.pos && !b.pos) {
+    // Both on bench — nothing to do
+    selectedPlayer = null;
+    renderRosterPanel();
+    return;
+  }
+
+  const lineup = getCurrentLineup();
+
+  if (a.pos && b.pos) {
+    // Both active: swap positions
+    lineup[a.pos] = b.name;
+    lineup[b.pos] = a.name;
+  } else if (a.pos && !b.pos) {
+    // a is active → bench; b is bench → a's slot
+    lineup[a.pos] = b.name;
+  } else if (!a.pos && b.pos) {
+    // a is bench → b's slot; b is active → bench
+    lineup[b.pos] = a.name;
+  }
+
+  selectedPlayer = null;
+  showToast(`✓ Swapped ${a.name} ↔ ${b.name}`);
+  saveLineup();
+  renderRosterPanel();
+  buildPlayerFilter();
+  buildPlaySelector();
+  drawFrame();
+}
+
+function showToast(message) {
+  const toast = document.getElementById('swap-toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('visible');
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => toast.classList.remove('visible'), 1500);
 }
 
 function renderBench() {
@@ -106,36 +214,16 @@ function renderBench() {
   if (!bench) return;
   bench.innerHTML = '';
 
-  const lineup = getCurrentLineup();
-  const starters = new Set(Object.values(lineup).filter(Boolean));
-
-  // Show all roster players
-  const benchPlayers = state.roster.filter(p => !starters.has(p.name));
-  const starterPlayers = state.roster.filter(p => starters.has(p.name));
-
-  // Bench players (available to sub in)
-  if (benchPlayers.length > 0) {
-    benchPlayers.forEach(player => {
-      bench.appendChild(createBenchPlayerBtn(player, true));
-    });
-  }
-
-  // Starters on bench (tap to edit)
-  if (starterPlayers.length > 0) {
-    const divider = document.createElement('div');
-    divider.className = 'bench-divider';
-    divider.textContent = '── Starters ──';
-    bench.appendChild(divider);
-    starterPlayers.forEach(player => {
-      bench.appendChild(createBenchPlayerBtn(player, false));
-    });
-  }
-
+  // Roster management list — just edit buttons for all players
   if (state.roster.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'bench-empty';
     empty.textContent = 'No players in roster';
     bench.appendChild(empty);
+  } else {
+    state.roster.forEach(player => {
+      bench.appendChild(createRosterManageRow(player));
+    });
   }
 
   // Add player button
@@ -146,38 +234,30 @@ function renderBench() {
   bench.appendChild(addBtn);
 }
 
-function createBenchPlayerBtn(player, isBench) {
-  const btn = document.createElement('div');
-  btn.className = 'bench-player-btn' + (isBench && selectedLineupSlot ? ' sub-available' : '');
+function createRosterManageRow(player) {
+  const row = document.createElement('div');
+  row.className = 'bench-player-btn';
 
   const color = player.color || '#999';
   const posText = (player.positions || []).join(', ') || '—';
+  const lineup = getCurrentLineup();
+  const starters = new Set(Object.values(lineup).filter(Boolean));
+  const isStarter = starters.has(player.name);
 
-  btn.innerHTML = `
+  row.innerHTML = `
     <span class="bench-dot" style="background:${color}"></span>
     <span class="bench-name">${player.name}</span>
     <span class="bench-pos">${posText}</span>
-    <span class="bench-number">#${player.number != null ? player.number : '?'}</span>
+    <span class="bench-number">${isStarter ? '▶' : ''} #${player.number != null ? player.number : '?'}</span>
     <button class="bench-edit-btn" data-id="${player.id}" title="Edit">✏️</button>
   `;
 
-  // Edit button
-  btn.querySelector('.bench-edit-btn').addEventListener('click', (e) => {
+  row.querySelector('.bench-edit-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     showPlayerForm(player);
   });
 
-  // Main tap: assign to lineup or show options
-  btn.addEventListener('click', () => {
-    if (selectedLineupSlot && isBench) {
-      assignToLineup(selectedLineupSlot, player.name);
-    } else if (selectedLineupSlot && !isBench) {
-      // Swap a starter's position
-      assignToLineup(selectedLineupSlot, player.name);
-    }
-  });
-
-  return btn;
+  return row;
 }
 
 function renderRotationBar() {
@@ -241,45 +321,6 @@ function renderRoutesPlayerSelect() {
 
 function getCurrentLineup() {
   return state.activeTeam === '1' ? state.lineup : state.lineup2;
-}
-
-function assignToLineup(position, playerName) {
-  const lineup = getCurrentLineup();
-
-  // P1-3 fix: find playerName's current slot (if any) so we can swap instead of losing the displaced player
-  let oldSlot = null;
-  for (const [pos, name] of Object.entries(lineup)) {
-    if (name === playerName && pos !== position) {
-      oldSlot = pos;
-      break;
-    }
-  }
-
-  // Who is currently at the target position (will be displaced)?
-  const displacedPlayer = lineup[position];
-
-  // Remove playerName from their old slot
-  if (oldSlot) lineup[oldSlot] = null;
-
-  // Place playerName in target slot
-  lineup[position] = playerName;
-
-  // P1-3 fix: move displaced player to playerName's old slot (swap), or bench (null) if playerName was on bench
-  if (displacedPlayer && displacedPlayer !== playerName) {
-    if (oldSlot) {
-      // Swap: displaced player goes to where playerName was
-      lineup[oldSlot] = displacedPlayer;
-    }
-    // If oldSlot is null, playerName came from bench — displaced player simply goes to bench (no lineup entry)
-  }
-
-  selectedLineupSlot = null;
-
-  saveLineup();
-  renderRosterPanel();
-  buildPlayerFilter();
-  buildPlaySelector();
-  drawFrame();
 }
 
 function toggleTeam() {

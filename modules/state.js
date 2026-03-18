@@ -99,6 +99,13 @@ export const state = {
 
 // ── Pure helpers ─────────────────────────────────────────────
 
+// Returns roster players NOT in the current active lineup
+export function getBenchPlayers() {
+  const lineup = state.activeTeam === '1' ? state.lineup : state.lineup2;
+  const starters = new Set(Object.values(lineup).filter(Boolean));
+  return state.roster.filter(p => !starters.has(p.name));
+}
+
 export function hasMotion(play) {
   return Object.values(play.players).some(pd => pd.motion);
 }
